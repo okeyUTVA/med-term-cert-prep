@@ -37,12 +37,12 @@
                         🩺 Medical Terminology Certification Prep
                     </h1>
                     <p class="text-indigo-100 text-sm sm:text-base mt-1 max-w-2xl">
-                        Standards Dictionary • Word Deconstructor • Flashcard Decks • Practice Exam
+                        10 Official Standards • Dictionary • Word Deconstructor • Flashcards • Practice Exam
                     </p>
                 </div>
                 <div class="flex items-center gap-3 self-start md:self-auto bg-slate-800/60 p-3 rounded-xl border border-slate-700/60 backdrop-blur">
                     <div class="text-center px-3 border-r border-slate-700">
-                        <span class="block text-2xl font-bold text-indigo-400">5</span>
+                        <span class="block text-2xl font-bold text-indigo-400">10</span>
                         <span class="text-[10px] text-slate-400 uppercase tracking-wider">Standards</span>
                     </div>
                     <div class="text-center px-3 border-r border-slate-700">
@@ -86,21 +86,16 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900">Medical Terminology Standards Dictionary</h2>
-                    <p class="text-slate-500 text-sm">Select a curriculum standard to isolate terms, or search across all standards.</p>
+                    <p class="text-slate-500 text-sm">Select any of the 10 curriculum standards to filter terms, or search across all standards.</p>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3">
-                    <select id="dictStandardFilter" onchange="filterDictionary()" class="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white font-semibold text-slate-700">
-                        <option value="all">All Curriculum Standards</option>
-                        <option value="standard_1">Standard 1: Word Structure & Elements</option>
-                        <option value="standard_2">Standard 2: Anatomical Direction & Positions</option>
-                        <option value="standard_3">Standard 3: Musculoskeletal & Integumentary</option>
-                        <option value="standard_4">Standard 4: Cardiovascular, Respiratory & Blood</option>
-                        <option value="standard_5">Standard 5: Digestive, Urinary & Endocrine</option>
+                    <select id="dictStandardFilter" onchange="filterDictionary()" class="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white font-semibold text-slate-700 max-w-xs">
+                        <option value="all">All 10 Curriculum Standards</option>
                     </select>
 
                     <div class="relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="dictSearch" oninput="filterDictionary()" placeholder="Search word or meaning..." class="pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full sm:w-56">
+                        <input type="text" id="dictSearch" oninput="filterDictionary()" placeholder="Search word or meaning..." class="pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full sm:w-48">
                     </div>
 
                     <select id="typeFilter" onchange="filterDictionary()" class="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
@@ -123,16 +118,11 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900">Interactive Word Deconstructor</h2>
-                    <p class="text-slate-500 text-sm">Select a standard and choose a term to break down into Prefix + Root + Suffix.</p>
+                    <p class="text-slate-500 text-sm">Select a standard to view terms and break them down into Prefix + Root + Suffix.</p>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3">
-                    <select id="deconstructStandardSelect" onchange="onDeconstructStandardChange()" class="px-4 py-2.5 border border-slate-300 font-semibold rounded-xl text-sm bg-white">
+                    <select id="deconstructStandardSelect" onchange="onDeconstructStandardChange()" class="px-4 py-2.5 border border-slate-300 font-semibold rounded-xl text-sm bg-white max-w-xs">
                         <option value="all">All Standards</option>
-                        <option value="standard_1">Standard 1: Word Structure & Elements</option>
-                        <option value="standard_2">Standard 2: Anatomical Direction & Positions</option>
-                        <option value="standard_3">Standard 3: Musculoskeletal & Integumentary</option>
-                        <option value="standard_4">Standard 4: Cardiovascular, Respiratory & Blood</option>
-                        <option value="standard_5">Standard 5: Digestive, Urinary & Endocrine</option>
                     </select>
 
                     <select id="termSelect" onchange="loadDeconstruction()" class="px-4 py-2.5 border border-indigo-200 bg-indigo-50 text-indigo-900 font-bold rounded-xl focus:ring-2 focus:ring-indigo-500 text-sm">
@@ -143,7 +133,7 @@
 
             <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-md space-y-8">
                 <div class="text-center space-y-2">
-                    <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full" id="deconstructCategory">Standard 1 Breakdown</span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full" id="deconstructCategory">Standard Term Breakdown</span>
                     <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2" id="deconstructTerm">Cardiomegaly</h3>
                     <p class="text-lg text-indigo-700 font-medium italic" id="deconstructMeaning">Enlargement of the heart</p>
                 </div>
@@ -164,16 +154,11 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900">Medical Terminology Flashcards</h2>
-                    <p class="text-slate-500 text-sm">Review word roots, prefixes, suffixes, and full clinical definitions by standard.</p>
+                    <p class="text-slate-500 text-sm">Review roots, prefixes, suffixes, and definitions by selecting any of the 10 standards.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
-                    <select id="flashcardStandard" onchange="initFlashcards()" class="px-3 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                    <select id="flashcardStandard" onchange="initFlashcards()" class="px-3 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white max-w-xs">
                         <option value="all">All Standards</option>
-                        <option value="standard_1">Standard 1: Word Structure & Elements</option>
-                        <option value="standard_2">Standard 2: Direction & Positions</option>
-                        <option value="standard_3">Standard 3: Musculoskeletal & Integumentary</option>
-                        <option value="standard_4">Standard 4: Cardio, Respiratory & Blood</option>
-                        <option value="standard_5">Standard 5: Digestive, Urinary & Endocrine</option>
                     </select>
                     <span class="text-sm font-medium text-slate-600" id="cardCounter">Card 1 of 0</span>
                 </div>
@@ -262,21 +247,24 @@
 
     <!-- SCRIPT DATA & LOGIC -->
     <script>
-        // STANDARDS METADATA
+        // ALL 10 OFFICIAL CURRICULUM STANDARDS
         const standardsList = [
-            { id: "standard_1", title: "Standard 1: Word Structure & Elements" },
-            { id: "standard_2", title: "Standard 2: Anatomical Direction & Positions" },
-            { id: "standard_3", title: "Standard 3: Musculoskeletal & Integumentary Systems" },
-            { id: "standard_4", title: "Standard 4: Cardiovascular, Respiratory & Blood Systems" },
-            { id: "standard_5", title: "Standard 5: Digestive, Urinary & Endocrine Systems" }
+            { id: "standard_1", title: "Standard 1: Word Structure & Component Parts" },
+            { id: "standard_2", title: "Standard 2: Anatomical Direction & Body Planes" },
+            { id: "standard_3", title: "Standard 3: Integumentary System Terminology" },
+            { id: "standard_4", title: "Standard 4: Skeletal & Muscular System Terminology" },
+            { id: "standard_5", title: "Standard 5: Cardiovascular & Blood System Terminology" },
+            { id: "standard_6", title: "Standard 6: Respiratory System Terminology" },
+            { id: "standard_7", title: "Standard 7: Digestive System Terminology" },
+            { id: "standard_8", title: "Standard 8: Urinary & Male Reproductive Systems" },
+            { id: "standard_9", title: "Standard 9: Female Reproductive System Terminology" },
+            { id: "standard_10", title: "Standard 10: Nervous System & Special Senses" }
         ];
 
-        // DICTIONARY DATASET CATEGORIZED BY STANDARD
+        // DICTIONARY DATASET ACROSS ALL 10 STANDARDS
         const dictionaryData = [
-            // Standard 1: Word Structure & Elements
+            // Standard 1: Word Structure & Component Parts
             { standard: "standard_1", word: "a- / an-", meaning: "without, absence of, lacking", type: "prefix" },
-            { standard: "standard_1", word: "brady-", meaning: "slow", type: "prefix" },
-            { standard: "standard_1", word: "tachy-", meaning: "fast, rapid", type: "prefix" },
             { standard: "standard_1", word: "dys-", meaning: "painful, difficult, abnormal", type: "prefix" },
             { standard: "standard_1", word: "hyper-", meaning: "excessive, above normal", type: "prefix" },
             { standard: "standard_1", word: "hypo-", meaning: "deficient, below normal", type: "prefix" },
@@ -284,59 +272,69 @@
             { standard: "standard_1", word: "-megaly", meaning: "enlargement", type: "suffix" },
             { standard: "standard_1", word: "-ology", meaning: "study of", type: "suffix" },
             { standard: "standard_1", word: "-oma", meaning: "tumor, mass", type: "suffix" },
-            { standard: "standard_1", word: "-plasty", meaning: "surgical repair", type: "suffix" },
-            { standard: "standard_1", word: "-scopy", meaning: "visual examination process", type: "suffix" },
 
             // Standard 2: Directional & Anatomical Terms
-            { standard: "standard_2", word: "ab-", meaning: "away from middle", type: "prefix" },
-            { standard: "standard_2", word: "ad-", meaning: "toward middle", type: "prefix" },
+            { standard: "standard_2", word: "ab-", meaning: "away from midline", type: "prefix" },
+            { standard: "standard_2", word: "ad-", meaning: "toward midline", type: "prefix" },
             { standard: "standard_2", word: "ante-", meaning: "before, forward", type: "prefix" },
             { standard: "standard_2", word: "epi-", meaning: "upon, over, above", type: "prefix" },
             { standard: "standard_2", word: "inter-", meaning: "between", type: "prefix" },
             { standard: "standard_2", word: "intra-", meaning: "within, inside", type: "prefix" },
-            { standard: "standard_2", word: "peri-", meaning: "around, surrounding", type: "prefix" },
             { standard: "standard_2", word: "sub-", meaning: "under, below", type: "prefix" },
-            { standard: "standard_2", word: "trans-", meaning: "across, through", type: "prefix" },
 
-            // Standard 3: Musculoskeletal & Integumentary Systems
-            { standard: "standard_3", word: "arthr/o", meaning: "joint", type: "root" },
-            { standard: "standard_3", word: "chondr/o", meaning: "cartilage", type: "root" },
+            // Standard 3: Integumentary System Terminology
             { standard: "standard_3", word: "dermat/o or derm/o", meaning: "skin", type: "root" },
-            { standard: "standard_3", word: "my/o", meaning: "muscle", type: "root" },
-            { standard: "standard_3", word: "oste/o", meaning: "bone", type: "root" },
+            { standard: "standard_3", word: "cutan/o", meaning: "skin layer", type: "root" },
+            { standard: "standard_3", word: "hidr/o", meaning: "sweat gland", type: "root" },
             { standard: "standard_3", word: "Dermatitis", meaning: "Inflammation of the skin", type: "term" },
-            { standard: "standard_3", word: "Osteoarthritis", meaning: "Inflammation of bone and joint tissue", type: "term" },
+            { standard: "standard_3", word: "Subcutaneous", meaning: "Pertaining to beneath the skin layer", type: "term" },
 
-            // Standard 4: Cardiovascular, Respiratory & Blood
-            { standard: "standard_4", word: "cardi/o", meaning: "heart", type: "root" },
-            { standard: "standard_4", word: "hem/o or hemat/o", meaning: "blood", type: "root" },
-            { standard: "standard_4", word: "pneumon/o or pulmon/o", meaning: "lung, air", type: "root" },
-            { standard: "standard_4", word: "rhin/o", meaning: "nose", type: "root" },
-            { standard: "standard_4", word: "-emia", meaning: "blood condition", type: "suffix" },
-            { standard: "standard_4", word: "Cardiomegaly", meaning: "Enlargement of the heart", type: "term" },
-            { standard: "standard_4", word: "Tachycardia", meaning: "Abnormally fast heart rate", type: "term" },
-            { standard: "standard_4", word: "Bradycardia", meaning: "Abnormally slow heart rate", type: "term" },
-            { standard: "standard_4", word: "Dyspnea", meaning: "Painful or difficult breathing", type: "term" },
+            // Standard 4: Skeletal & Muscular System Terminology
+            { standard: "standard_4", word: "arthr/o", meaning: "joint", type: "root" },
+            { standard: "standard_4", word: "chondr/o", meaning: "cartilage", type: "root" },
+            { standard: "standard_4", word: "my/o", meaning: "muscle", type: "root" },
+            { standard: "standard_4", word: "oste/o", meaning: "bone", type: "root" },
+            { standard: "standard_4", word: "Osteoarthritis", meaning: "Inflammation of bone and joint tissue", type: "term" },
 
-            // Standard 5: Digestive, Urinary & Endocrine
-            { standard: "standard_5", word: "gastr/o", meaning: "stomach", type: "root" },
-            { standard: "standard_5", word: "hepat/o", meaning: "liver", type: "root" },
-            { standard: "standard_5", word: "nephr/o or ren/o", meaning: "kidney", type: "root" },
-            { standard: "standard_5", word: "Gastroenteritis", meaning: "Inflammation of stomach and intestines", type: "term" },
-            { standard: "standard_5", word: "Nephrectomy", meaning: "Surgical removal of a kidney", type: "term" },
-            { standard: "standard_5", word: "Hyperglycemia", meaning: "Excessive blood glucose condition", type: "term" }
+            // Standard 5: Cardiovascular & Blood System Terminology
+            { standard: "standard_5", word: "cardi/o", meaning: "heart", type: "root" },
+            { standard: "standard_5", word: "hem/o or hemat/o", meaning: "blood", type: "root" },
+            { standard: "standard_5", word: "brady-", meaning: "slow", type: "prefix" },
+            { standard: "standard_5", word: "tachy-", meaning: "fast, rapid", type: "prefix" },
+            { standard: "standard_5", word: "-emia", meaning: "blood condition", type: "suffix" },
+            { standard: "standard_5", word: "Cardiomegaly", meaning: "Enlargement of the heart", type: "term" },
+            { standard: "standard_5", word: "Tachycardia", meaning: "Abnormally fast heart rate", type: "term" },
+            { standard: "standard_5", word: "Bradycardia", meaning: "Abnormally slow heart rate", type: "term" },
+
+            // Standard 6: Respiratory System Terminology
+            { standard: "standard_6", word: "pneumon/o or pulmon/o", meaning: "lung, air", type: "root" },
+            { standard: "standard_6", word: "rhin/o", meaning: "nose", type: "root" },
+            { standard: "standard_6", word: "Dyspnea", meaning: "Painful or difficult breathing", type: "term" },
+            { standard: "standard_6", word: "Rhinoplasty", meaning: "Surgical repair of the nose", type: "term" },
+
+            // Standard 7: Digestive System Terminology
+            { standard: "standard_7", word: "gastr/o", meaning: "stomach", type: "root" },
+            { standard: "standard_7", word: "hepat/o", meaning: "liver", type: "root" },
+            { standard: "standard_7", word: "Gastroenteritis", meaning: "Inflammation of stomach and intestines", type: "term" },
+
+            // Standard 8: Urinary & Male Reproductive Systems
+            { standard: "standard_8", word: "nephr/o or ren/o", meaning: "kidney", type: "root" },
+            { standard: "standard_8", word: "orchi/o", meaning: "testis", type: "root" },
+            { standard: "standard_8", word: "Nephrectomy", meaning: "Surgical removal of a kidney", type: "term" },
+
+            // Standard 9: Female Reproductive System Terminology
+            { standard: "standard_9", word: "hyster/o or uter/o", meaning: "uterus", type: "root" },
+            { standard: "standard_9", word: "oophor/o", meaning: "ovary", type: "root" },
+            { standard: "standard_9", word: "Hysterectomy", meaning: "Surgical removal of the uterus", type: "term" },
+
+            // Standard 10: Nervous System & Special Senses
+            { standard: "standard_10", word: "neur/o", meaning: "nerve", type: "root" },
+            { standard: "standard_10", word: "encephal/o", meaning: "brain", type: "root" },
+            { standard: "standard_10", word: "Neuropathy", meaning: "Disease condition of the nerves", type: "term" }
         ];
 
-        // DECONSTRUCTOR TERMS ORGANIZED BY STANDARD
+        // DECONSTRUCTOR TERMS FOR ALL 10 STANDARDS
         const deconstructorTermsData = [
-            {
-                standard: "standard_1",
-                term: "Cardiomegaly",
-                meaning: "Enlargement of the heart",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Cardi/o", meaning: "Heart" },
-                suffix: { text: "-megaly", meaning: "Enlargement" }
-            },
             {
                 standard: "standard_1",
                 term: "Endoscopy",
@@ -362,7 +360,7 @@
                 suffix: { text: "-itis", meaning: "Inflammation" }
             },
             {
-                standard: "standard_3",
+                standard: "standard_4",
                 term: "Osteoarthritis",
                 meaning: "Inflammation of bone and joint tissue",
                 prefix: { text: "None", meaning: "No prefix present" },
@@ -370,7 +368,15 @@
                 suffix: { text: "-itis", meaning: "Inflammation" }
             },
             {
-                standard: "standard_4",
+                standard: "standard_5",
+                term: "Cardiomegaly",
+                meaning: "Enlargement of the heart",
+                prefix: { text: "None", meaning: "No prefix present" },
+                root: { text: "Cardi/o", meaning: "Heart" },
+                suffix: { text: "-megaly", meaning: "Enlargement" }
+            },
+            {
+                standard: "standard_5",
                 term: "Tachycardia",
                 meaning: "Abnormally rapid heart rate",
                 prefix: { text: "Tachy-", meaning: "Fast / Rapid" },
@@ -378,7 +384,7 @@
                 suffix: { text: "-ia", meaning: "Condition" }
             },
             {
-                standard: "standard_4",
+                standard: "standard_5",
                 term: "Bradycardia",
                 meaning: "Abnormally slow heart rate",
                 prefix: { text: "Brady-", meaning: "Slow" },
@@ -386,7 +392,7 @@
                 suffix: { text: "-ia", meaning: "Condition" }
             },
             {
-                standard: "standard_4",
+                standard: "standard_6",
                 term: "Dyspnea",
                 meaning: "Painful or difficult breathing",
                 prefix: { text: "Dys-", meaning: "Painful / Difficult / Abnormal" },
@@ -394,7 +400,7 @@
                 suffix: { text: "None", meaning: "Combined into root/suffix form" }
             },
             {
-                standard: "standard_4",
+                standard: "standard_6",
                 term: "Rhinoplasty",
                 meaning: "Surgical repair of the nose",
                 prefix: { text: "None", meaning: "No prefix present" },
@@ -402,7 +408,7 @@
                 suffix: { text: "-plasty", meaning: "Surgical repair" }
             },
             {
-                standard: "standard_5",
+                standard: "standard_7",
                 term: "Gastroenteritis",
                 meaning: "Inflammation of the stomach and intestines",
                 prefix: { text: "None", meaning: "No prefix present" },
@@ -410,7 +416,7 @@
                 suffix: { text: "-itis", meaning: "Inflammation" }
             },
             {
-                standard: "standard_5",
+                standard: "standard_8",
                 term: "Nephrectomy",
                 meaning: "Surgical removal of a kidney",
                 prefix: { text: "None", meaning: "No prefix present" },
@@ -418,12 +424,20 @@
                 suffix: { text: "-ectomy", meaning: "Surgical removal / Excision" }
             },
             {
-                standard: "standard_5",
-                term: "Hyperglycemia",
-                meaning: "Excessive glucose in the blood",
-                prefix: { text: "Hyper-", meaning: "Excessive / Above normal" },
-                root: { text: "Glyc/o", meaning: "Sugar / Glucose" },
-                suffix: { text: "-emia", meaning: "Blood condition" }
+                standard: "standard_9",
+                term: "Hysterectomy",
+                meaning: "Surgical removal of the uterus",
+                prefix: { text: "None", meaning: "No prefix present" },
+                root: { text: "Hyster/o", meaning: "Uterus" },
+                suffix: { text: "-ectomy", meaning: "Surgical removal / Excision" }
+            },
+            {
+                standard: "standard_10",
+                term: "Neuropathy",
+                meaning: "Disease condition of the nerves",
+                prefix: { text: "None", meaning: "No prefix present" },
+                root: { text: "Neur/o", meaning: "Nerve" },
+                suffix: { text: "-pathy", meaning: "Disease condition" }
             }
         ];
 
@@ -492,10 +506,34 @@
 
         // INITIALIZATION
         window.addEventListener('DOMContentLoaded', () => {
+            populateStandardDropdowns();
             renderDictionary();
             updateDeconstructorTerms();
             loadDeconstruction();
         });
+
+        function populateStandardDropdowns() {
+            const dictSelect = document.getElementById('dictStandardFilter');
+            const deconstructSelect = document.getElementById('deconstructStandardSelect');
+            const flashSelect = document.getElementById('flashcardStandard');
+
+            standardsList.forEach(std => {
+                const opt1 = document.createElement('option');
+                opt1.value = std.id;
+                opt1.textContent = std.title;
+                dictSelect.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = std.id;
+                opt2.textContent = std.title;
+                deconstructSelect.appendChild(opt2);
+
+                const opt3 = document.createElement('option');
+                opt3.value = std.id;
+                opt3.textContent = std.title;
+                flashSelect.appendChild(opt3);
+            });
+        }
 
         function switchTab(tabId) {
             activeTab = tabId;
