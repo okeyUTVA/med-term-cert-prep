@@ -42,8 +42,8 @@
                 </div>
                 <div class="flex items-center gap-3 self-start md:self-auto bg-slate-800/60 p-3 rounded-xl border border-slate-700/60 backdrop-blur">
                     <div class="text-center px-3 border-r border-slate-700">
-                        <span class="block text-2xl font-bold text-indigo-400">100+</span>
-                        <span class="text-[10px] text-slate-400 uppercase tracking-wider">Word Elements</span>
+                        <span class="block text-2xl font-bold text-indigo-400">5</span>
+                        <span class="text-[10px] text-slate-400 uppercase tracking-wider">Standards</span>
                     </div>
                     <div class="text-center px-3 border-r border-slate-700">
                         <span class="block text-2xl font-bold text-emerald-400">72%</span>
@@ -86,15 +86,25 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900">Medical Terminology Standards Dictionary</h2>
-                    <p class="text-slate-500 text-sm">Search roots, prefixes, suffixes, combining forms, and anatomical vocabulary.</p>
+                    <p class="text-slate-500 text-sm">Select a curriculum standard to isolate terms, or search across all standards.</p>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3">
+                    <select id="dictStandardFilter" onchange="filterDictionary()" class="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white font-semibold text-slate-700">
+                        <option value="all">All Curriculum Standards</option>
+                        <option value="standard_1">Standard 1: Word Structure & Elements</option>
+                        <option value="standard_2">Standard 2: Anatomical Direction & Positions</option>
+                        <option value="standard_3">Standard 3: Musculoskeletal & Integumentary</option>
+                        <option value="standard_4">Standard 4: Cardiovascular, Respiratory & Blood</option>
+                        <option value="standard_5">Standard 5: Digestive, Urinary & Endocrine</option>
+                    </select>
+
                     <div class="relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="dictSearch" oninput="filterDictionary()" placeholder="Search root, term, or meaning..." class="pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full sm:w-64">
+                        <input type="text" id="dictSearch" oninput="filterDictionary()" placeholder="Search word or meaning..." class="pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full sm:w-56">
                     </div>
+
                     <select id="typeFilter" onchange="filterDictionary()" class="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
-                        <option value="all">All Element Types</option>
+                        <option value="all">All Types</option>
                         <option value="prefix">Prefixes</option>
                         <option value="root">Combining Forms / Roots</option>
                         <option value="suffix">Suffixes</option>
@@ -113,16 +123,27 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900">Interactive Word Deconstructor</h2>
-                    <p class="text-slate-500 text-sm">Break medical terms down into Prefix + Root / Combining Form + Suffix to master term translation.</p>
+                    <p class="text-slate-500 text-sm">Select a standard and choose a term to break down into Prefix + Root + Suffix.</p>
                 </div>
-                <select id="termSelect" onchange="loadDeconstruction()" class="px-4 py-2.5 border border-indigo-200 bg-indigo-50 text-indigo-900 font-semibold rounded-xl focus:ring-2 focus:ring-indigo-500 text-sm max-w-xs">
-                    <!-- Options populated by JS -->
-                </select>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <select id="deconstructStandardSelect" onchange="onDeconstructStandardChange()" class="px-4 py-2.5 border border-slate-300 font-semibold rounded-xl text-sm bg-white">
+                        <option value="all">All Standards</option>
+                        <option value="standard_1">Standard 1: Word Structure & Elements</option>
+                        <option value="standard_2">Standard 2: Anatomical Direction & Positions</option>
+                        <option value="standard_3">Standard 3: Musculoskeletal & Integumentary</option>
+                        <option value="standard_4">Standard 4: Cardiovascular, Respiratory & Blood</option>
+                        <option value="standard_5">Standard 5: Digestive, Urinary & Endocrine</option>
+                    </select>
+
+                    <select id="termSelect" onchange="loadDeconstruction()" class="px-4 py-2.5 border border-indigo-200 bg-indigo-50 text-indigo-900 font-bold rounded-xl focus:ring-2 focus:ring-indigo-500 text-sm">
+                        <!-- Options populated dynamically -->
+                    </select>
+                </div>
             </div>
 
             <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-md space-y-8">
                 <div class="text-center space-y-2">
-                    <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full" id="deconstructCategory">Medical Term Breakdown</span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full" id="deconstructCategory">Standard 1 Breakdown</span>
                     <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2" id="deconstructTerm">Cardiomegaly</h3>
                     <p class="text-lg text-indigo-700 font-medium italic" id="deconstructMeaning">Enlargement of the heart</p>
                 </div>
@@ -143,15 +164,16 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900">Medical Terminology Flashcards</h2>
-                    <p class="text-slate-500 text-sm">Review word roots, prefixes, suffixes, and full clinical definitions.</p>
+                    <p class="text-slate-500 text-sm">Review word roots, prefixes, suffixes, and full clinical definitions by standard.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
-                    <select id="flashcardCategory" onchange="initFlashcards()" class="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
-                        <option value="all">All Elements</option>
-                        <option value="prefix">Prefixes</option>
-                        <option value="root">Combining Forms / Roots</option>
-                        <option value="suffix">Suffixes</option>
-                        <option value="term">Full Terms</option>
+                    <select id="flashcardStandard" onchange="initFlashcards()" class="px-3 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                        <option value="all">All Standards</option>
+                        <option value="standard_1">Standard 1: Word Structure & Elements</option>
+                        <option value="standard_2">Standard 2: Direction & Positions</option>
+                        <option value="standard_3">Standard 3: Musculoskeletal & Integumentary</option>
+                        <option value="standard_4">Standard 4: Cardio, Respiratory & Blood</option>
+                        <option value="standard_5">Standard 5: Digestive, Urinary & Endocrine</option>
                     </select>
                     <span class="text-sm font-medium text-slate-600" id="cardCounter">Card 1 of 0</span>
                 </div>
@@ -240,88 +262,75 @@
 
     <!-- SCRIPT DATA & LOGIC -->
     <script>
-        // COMPREHENSIVE MEDICAL TERMINOLOGY STANDARDS DATASET
-        const dictionaryData = [
-            // PREFIXES
-            { word: "a- / an-", meaning: "without, absence of, lacking", type: "prefix" },
-            { word: "ab-", meaning: "away from", type: "prefix" },
-            { word: "ad-", meaning: "toward, near", type: "prefix" },
-            { word: "ante-", meaning: "before, forward", type: "prefix" },
-            { word: "anti-", meaning: "against", type: "prefix" },
-            { word: "brady-", meaning: "slow", type: "prefix" },
-            { word: "dys-", meaning: "painful, difficult, abnormal", type: "prefix" },
-            { word: "endo-", meaning: "within, inside", type: "prefix" },
-            { word: "epi-", meaning: "upon, over, above", type: "prefix" },
-            { word: "exo- / ecto-", meaning: "outside, outward", type: "prefix" },
-            { word: "hyper-", meaning: "excessive, above normal", type: "prefix" },
-            { word: "hypo-", meaning: "deficient, below normal", type: "prefix" },
-            { word: "inter-", meaning: "between", type: "prefix" },
-            { word: "intra-", meaning: "within, inside", type: "prefix" },
-            { word: "macro-", meaning: "large", type: "prefix" },
-            { word: "micro-", meaning: "small", type: "prefix" },
-            { word: "neo-", meaning: "new", type: "prefix" },
-            { word: "peri-", meaning: "around, surrounding", type: "prefix" },
-            { word: "poly-", meaning: "many, excessive", type: "prefix" },
-            { word: "post-", meaning: "after, behind", type: "prefix" },
-            { word: "pre-", meaning: "before, in front of", type: "prefix" },
-            { word: "sub-", meaning: "under, below", type: "prefix" },
-            { word: "tachy-", meaning: "fast, rapid", type: "prefix" },
-            { word: "trans-", meaning: "across, through", type: "prefix" },
-
-            // COMBINING FORMS / ROOTS
-            { word: "arthr/o", meaning: "joint", type: "root" },
-            { word: "cardi/o", meaning: "heart", type: "root" },
-            { word: "cephal/o", meaning: "head", type: "root" },
-            { word: "chondr/o", meaning: "cartilage", type: "root" },
-            { word: "cyt/o", meaning: "cell", type: "root" },
-            { word: "dermat/o or derm/o", meaning: "skin", type: "root" },
-            { word: "encephal/o", meaning: "brain", type: "root" },
-            { word: "gastr/o", meaning: "stomach", type: "root" },
-            { word: "hem/o or hemat/o", meaning: "blood", type: "root" },
-            { word: "hepat/o", meaning: "liver", type: "root" },
-            { word: "hist/o", meaning: "tissue", type: "root" },
-            { word: "my/o", meaning: "muscle", type: "root" },
-            { word: "nephr/o or ren/o", meaning: "kidney", type: "root" },
-            { word: "neur/o", meaning: "nerve, nervous system", type: "root" },
-            { word: "oste/o", meaning: "bone", type: "root" },
-            { word: "path/o", meaning: "disease", type: "root" },
-            { word: "pneumon/o or pulmon/o", meaning: "lung, air", type: "root" },
-            { word: "rhin/o", meaning: "nose", type: "root" },
-            { word: "thorac/o", meaning: "chest", type: "root" },
-
-            // SUFFIXES
-            { word: "-emia", meaning: "blood condition", type: "suffix" },
-            { word: "-itis", meaning: "inflammation", type: "suffix" },
-            { word: "-logy", meaning: "study of", type: "suffix" },
-            { word: "-megaly", meaning: "enlargement", type: "suffix" },
-            { word: "-oma", meaning: "tumor, mass", type: "suffix" },
-            { word: "-osis", meaning: "abnormal condition, disease process", type: "suffix" },
-            { word: "-pathy", meaning: "disease condition", type: "suffix" },
-            { word: "-plasty", meaning: "surgical repair", type: "suffix" },
-            { word: "-scopy", meaning: "visual examination process", type: "suffix" },
-            { word: "-stomy", meaning: "surgical creation of a new opening", type: "suffix" },
-            { word: "-tomy", meaning: "incision, cutting into", type: "suffix" },
-            { word: "-algia", meaning: "pain", type: "suffix" },
-            { word: "-centesis", meaning: "surgical puncture to remove fluid", type: "suffix" },
-
-            // FULL TERMS FOR DECONSTRUCTION
-            { word: "Cardiomegaly", meaning: "Enlargement of the heart", type: "term" },
-            { word: "Gastroenteritis", meaning: "Inflammation of the stomach and intestines", type: "term" },
-            { word: "Dermatitis", meaning: "Inflammation of the skin", type: "term" },
-            { word: "Osteoarthritis", meaning: "Inflammation of bone and joint tissue", type: "term" },
-            { word: "Tachycardia", meaning: "Abnormally fast heart rate", type: "term" },
-            { word: "Bradycardia", meaning: "Abnormally slow heart rate", type: "term" },
-            { word: "Nephrectomy", meaning: "Surgical removal of a kidney", type: "term" },
-            { word: "Dyspnea", meaning: "Painful or difficult breathing", type: "term" },
-            { word: "Neuropathy", meaning: "Disease condition of the nerves", type: "term" },
-            { word: "Rhinoplasty", meaning: "Surgical repair of the nose", type: "term" },
-            { word: "Endoscopy", meaning: "Visual examination inside a body cavity", type: "term" },
-            { word: "Hyperglycemia", meaning: "Excessive blood glucose condition", type: "term" }
+        // STANDARDS METADATA
+        const standardsList = [
+            { id: "standard_1", title: "Standard 1: Word Structure & Elements" },
+            { id: "standard_2", title: "Standard 2: Anatomical Direction & Positions" },
+            { id: "standard_3", title: "Standard 3: Musculoskeletal & Integumentary Systems" },
+            { id: "standard_4", title: "Standard 4: Cardiovascular, Respiratory & Blood Systems" },
+            { id: "standard_5", title: "Standard 5: Digestive, Urinary & Endocrine Systems" }
         ];
 
-        // FULL DECONSTRUCTOR DATASET FOR ALL STANDARDS TERMS
+        // DICTIONARY DATASET CATEGORIZED BY STANDARD
+        const dictionaryData = [
+            // Standard 1: Word Structure & Elements
+            { standard: "standard_1", word: "a- / an-", meaning: "without, absence of, lacking", type: "prefix" },
+            { standard: "standard_1", word: "brady-", meaning: "slow", type: "prefix" },
+            { standard: "standard_1", word: "tachy-", meaning: "fast, rapid", type: "prefix" },
+            { standard: "standard_1", word: "dys-", meaning: "painful, difficult, abnormal", type: "prefix" },
+            { standard: "standard_1", word: "hyper-", meaning: "excessive, above normal", type: "prefix" },
+            { standard: "standard_1", word: "hypo-", meaning: "deficient, below normal", type: "prefix" },
+            { standard: "standard_1", word: "-itis", meaning: "inflammation", type: "suffix" },
+            { standard: "standard_1", word: "-megaly", meaning: "enlargement", type: "suffix" },
+            { standard: "standard_1", word: "-ology", meaning: "study of", type: "suffix" },
+            { standard: "standard_1", word: "-oma", meaning: "tumor, mass", type: "suffix" },
+            { standard: "standard_1", word: "-plasty", meaning: "surgical repair", type: "suffix" },
+            { standard: "standard_1", word: "-scopy", meaning: "visual examination process", type: "suffix" },
+
+            // Standard 2: Directional & Anatomical Terms
+            { standard: "standard_2", word: "ab-", meaning: "away from middle", type: "prefix" },
+            { standard: "standard_2", word: "ad-", meaning: "toward middle", type: "prefix" },
+            { standard: "standard_2", word: "ante-", meaning: "before, forward", type: "prefix" },
+            { standard: "standard_2", word: "epi-", meaning: "upon, over, above", type: "prefix" },
+            { standard: "standard_2", word: "inter-", meaning: "between", type: "prefix" },
+            { standard: "standard_2", word: "intra-", meaning: "within, inside", type: "prefix" },
+            { standard: "standard_2", word: "peri-", meaning: "around, surrounding", type: "prefix" },
+            { standard: "standard_2", word: "sub-", meaning: "under, below", type: "prefix" },
+            { standard: "standard_2", word: "trans-", meaning: "across, through", type: "prefix" },
+
+            // Standard 3: Musculoskeletal & Integumentary Systems
+            { standard: "standard_3", word: "arthr/o", meaning: "joint", type: "root" },
+            { standard: "standard_3", word: "chondr/o", meaning: "cartilage", type: "root" },
+            { standard: "standard_3", word: "dermat/o or derm/o", meaning: "skin", type: "root" },
+            { standard: "standard_3", word: "my/o", meaning: "muscle", type: "root" },
+            { standard: "standard_3", word: "oste/o", meaning: "bone", type: "root" },
+            { standard: "standard_3", word: "Dermatitis", meaning: "Inflammation of the skin", type: "term" },
+            { standard: "standard_3", word: "Osteoarthritis", meaning: "Inflammation of bone and joint tissue", type: "term" },
+
+            // Standard 4: Cardiovascular, Respiratory & Blood
+            { standard: "standard_4", word: "cardi/o", meaning: "heart", type: "root" },
+            { standard: "standard_4", word: "hem/o or hemat/o", meaning: "blood", type: "root" },
+            { standard: "standard_4", word: "pneumon/o or pulmon/o", meaning: "lung, air", type: "root" },
+            { standard: "standard_4", word: "rhin/o", meaning: "nose", type: "root" },
+            { standard: "standard_4", word: "-emia", meaning: "blood condition", type: "suffix" },
+            { standard: "standard_4", word: "Cardiomegaly", meaning: "Enlargement of the heart", type: "term" },
+            { standard: "standard_4", word: "Tachycardia", meaning: "Abnormally fast heart rate", type: "term" },
+            { standard: "standard_4", word: "Bradycardia", meaning: "Abnormally slow heart rate", type: "term" },
+            { standard: "standard_4", word: "Dyspnea", meaning: "Painful or difficult breathing", type: "term" },
+
+            // Standard 5: Digestive, Urinary & Endocrine
+            { standard: "standard_5", word: "gastr/o", meaning: "stomach", type: "root" },
+            { standard: "standard_5", word: "hepat/o", meaning: "liver", type: "root" },
+            { standard: "standard_5", word: "nephr/o or ren/o", meaning: "kidney", type: "root" },
+            { standard: "standard_5", word: "Gastroenteritis", meaning: "Inflammation of stomach and intestines", type: "term" },
+            { standard: "standard_5", word: "Nephrectomy", meaning: "Surgical removal of a kidney", type: "term" },
+            { standard: "standard_5", word: "Hyperglycemia", meaning: "Excessive blood glucose condition", type: "term" }
+        ];
+
+        // DECONSTRUCTOR TERMS ORGANIZED BY STANDARD
         const deconstructorTermsData = [
             {
+                standard: "standard_1",
                 term: "Cardiomegaly",
                 meaning: "Enlargement of the heart",
                 prefix: { text: "None", meaning: "No prefix present" },
@@ -329,69 +338,7 @@
                 suffix: { text: "-megaly", meaning: "Enlargement" }
             },
             {
-                term: "Gastroenteritis",
-                meaning: "Inflammation of the stomach and intestines",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Gastr/o + Enter/o", meaning: "Stomach + Intestines" },
-                suffix: { text: "-itis", meaning: "Inflammation" }
-            },
-            {
-                term: "Dermatitis",
-                meaning: "Inflammation of the skin",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Dermat/o", meaning: "Skin" },
-                suffix: { text: "-itis", meaning: "Inflammation" }
-            },
-            {
-                term: "Osteoarthritis",
-                meaning: "Inflammation of bone and joint tissue",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Oste/o + Arthr/o", meaning: "Bone + Joint" },
-                suffix: { text: "-itis", meaning: "Inflammation" }
-            },
-            {
-                term: "Tachycardia",
-                meaning: "Abnormally rapid heart rate",
-                prefix: { text: "Tachy-", meaning: "Fast / Rapid" },
-                root: { text: "Cardi/o", meaning: "Heart" },
-                suffix: { text: "-ia", meaning: "Condition" }
-            },
-            {
-                term: "Bradycardia",
-                meaning: "Abnormally slow heart rate",
-                prefix: { text: "Brady-", meaning: "Slow" },
-                root: { text: "Cardi/o", meaning: "Heart" },
-                suffix: { text: "-ia", meaning: "Condition" }
-            },
-            {
-                term: "Nephrectomy",
-                meaning: "Surgical removal of a kidney",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Nephr/o", meaning: "Kidney" },
-                suffix: { text: "-ectomy", meaning: "Surgical removal / Excision" }
-            },
-            {
-                term: "Dyspnea",
-                meaning: "Painful or difficult breathing",
-                prefix: { text: "Dys-", meaning: "Painful / Difficult / Abnormal" },
-                root: { text: "-pnea", meaning: "Breathing / Respiration" },
-                suffix: { text: "None", meaning: "Combined into root/suffix form" }
-            },
-            {
-                term: "Neuropathy",
-                meaning: "Disease condition of the nerves",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Neur/o", meaning: "Nerve" },
-                suffix: { text: "-pathy", meaning: "Disease condition" }
-            },
-            {
-                term: "Rhinoplasty",
-                meaning: "Surgical repair of the nose",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Rhin/o", meaning: "Nose" },
-                suffix: { text: "-plasty", meaning: "Surgical repair" }
-            },
-            {
+                standard: "standard_1",
                 term: "Endoscopy",
                 meaning: "Visual examination process inside the body",
                 prefix: { text: "Endo-", meaning: "Within / Inside" },
@@ -399,6 +346,79 @@
                 suffix: { text: "-scopy", meaning: "Visual examination process" }
             },
             {
+                standard: "standard_2",
+                term: "Subcutaneous",
+                meaning: "Pertaining to beneath the skin layer",
+                prefix: { text: "Sub-", meaning: "Under / Below" },
+                root: { text: "Cutan/o", meaning: "Skin" },
+                suffix: { text: "-ous", meaning: "Pertaining to" }
+            },
+            {
+                standard: "standard_3",
+                term: "Dermatitis",
+                meaning: "Inflammation of the skin",
+                prefix: { text: "None", meaning: "No prefix present" },
+                root: { text: "Dermat/o", meaning: "Skin" },
+                suffix: { text: "-itis", meaning: "Inflammation" }
+            },
+            {
+                standard: "standard_3",
+                term: "Osteoarthritis",
+                meaning: "Inflammation of bone and joint tissue",
+                prefix: { text: "None", meaning: "No prefix present" },
+                root: { text: "Oste/o + Arthr/o", meaning: "Bone + Joint" },
+                suffix: { text: "-itis", meaning: "Inflammation" }
+            },
+            {
+                standard: "standard_4",
+                term: "Tachycardia",
+                meaning: "Abnormally rapid heart rate",
+                prefix: { text: "Tachy-", meaning: "Fast / Rapid" },
+                root: { text: "Cardi/o", meaning: "Heart" },
+                suffix: { text: "-ia", meaning: "Condition" }
+            },
+            {
+                standard: "standard_4",
+                term: "Bradycardia",
+                meaning: "Abnormally slow heart rate",
+                prefix: { text: "Brady-", meaning: "Slow" },
+                root: { text: "Cardi/o", meaning: "Heart" },
+                suffix: { text: "-ia", meaning: "Condition" }
+            },
+            {
+                standard: "standard_4",
+                term: "Dyspnea",
+                meaning: "Painful or difficult breathing",
+                prefix: { text: "Dys-", meaning: "Painful / Difficult / Abnormal" },
+                root: { text: "-pnea", meaning: "Breathing / Respiration" },
+                suffix: { text: "None", meaning: "Combined into root/suffix form" }
+            },
+            {
+                standard: "standard_4",
+                term: "Rhinoplasty",
+                meaning: "Surgical repair of the nose",
+                prefix: { text: "None", meaning: "No prefix present" },
+                root: { text: "Rhin/o", meaning: "Nose" },
+                suffix: { text: "-plasty", meaning: "Surgical repair" }
+            },
+            {
+                standard: "standard_5",
+                term: "Gastroenteritis",
+                meaning: "Inflammation of the stomach and intestines",
+                prefix: { text: "None", meaning: "No prefix present" },
+                root: { text: "Gastr/o + Enter/o", meaning: "Stomach + Intestines" },
+                suffix: { text: "-itis", meaning: "Inflammation" }
+            },
+            {
+                standard: "standard_5",
+                term: "Nephrectomy",
+                meaning: "Surgical removal of a kidney",
+                prefix: { text: "None", meaning: "No prefix present" },
+                root: { text: "Nephr/o", meaning: "Kidney" },
+                suffix: { text: "-ectomy", meaning: "Surgical removal / Excision" }
+            },
+            {
+                standard: "standard_5",
                 term: "Hyperglycemia",
                 meaning: "Excessive glucose in the blood",
                 prefix: { text: "Hyper-", meaning: "Excessive / Above normal" },
@@ -407,7 +427,7 @@
             }
         ];
 
-        // 50 BOARD PRACTICE EXAM QUESTIONS
+        // 50 EXAM QUESTIONS DATASET
         const examQuestionsData = [
             { q: "Which combining form refers to the heart?", opts: ["Arthr/o", "Cardi/o", "Nephr/o", "Gastr/o"], ans: 1 },
             { q: "The suffix -itis indicates:", opts: ["Surgical removal", "Enlargement", "Inflammation", "Pain"], ans: 2 },
@@ -473,7 +493,7 @@
         // INITIALIZATION
         window.addEventListener('DOMContentLoaded', () => {
             renderDictionary();
-            populateDeconstructorSelect();
+            updateDeconstructorTerms();
             loadDeconstruction();
         });
 
@@ -489,25 +509,30 @@
             activeBtn.className = 'nav-btn px-4 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-all text-indigo-700 bg-indigo-50 border border-indigo-200';
 
             if (tabId === 'flashcards') initFlashcards();
-            if (tabId === 'deconstructor') loadDeconstruction();
+            if (tabId === 'deconstructor') {
+                updateDeconstructorTerms();
+                loadDeconstruction();
+            }
         }
 
         // DICTIONARY LOGIC
         function renderDictionary() {
             const container = document.getElementById('dictionaryContainer');
-            const type = document.getElementById('typeFilter').value;
+            const stdFilter = document.getElementById('dictStandardFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
             const query = document.getElementById('dictSearch').value.toLowerCase();
 
             container.innerHTML = '';
 
             const filtered = dictionaryData.filter(item => {
-                const matchesType = type === 'all' || item.type === type;
+                const matchesStd = stdFilter === 'all' || item.standard === stdFilter;
+                const matchesType = typeFilter === 'all' || item.type === typeFilter;
                 const matchesQuery = item.word.toLowerCase().includes(query) || item.meaning.toLowerCase().includes(query);
-                return matchesType && matchesQuery;
+                return matchesStd && matchesType && matchesQuery;
             });
 
             if (filtered.length === 0) {
-                container.innerHTML = `<p class="text-slate-500 text-center py-8">No terms or elements matched your search.</p>`;
+                container.innerHTML = `<p class="text-slate-500 text-center py-8 font-medium">No terms or word elements matched your selected standard and search filters.</p>`;
                 return;
             }
 
@@ -518,10 +543,16 @@
                 if (item.type === "suffix") badgeClass = "bg-rose-100 text-rose-800";
                 if (item.type === "term") badgeClass = "bg-emerald-100 text-emerald-800";
 
+                const stdObj = standardsList.find(s => s.id === item.standard);
+                const stdLabel = stdObj ? stdObj.title.split(':')[0] : 'Standard';
+
                 html += `
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-2">
                         <div>
-                            <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${badgeClass}">${item.type}</span>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${badgeClass}">${item.type}</span>
+                                <span class="text-[10px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">${stdLabel}</span>
+                            </div>
                             <h4 class="font-bold text-lg text-slate-900 mt-2">${item.word}</h4>
                             <p class="text-sm text-slate-600">${item.meaning}</p>
                         </div>
@@ -537,21 +568,42 @@
         }
 
         // WORD DECONSTRUCTOR LOGIC
-        function populateDeconstructorSelect() {
+        function updateDeconstructorTerms() {
+            const std = document.getElementById('deconstructStandardSelect').value;
             const select = document.getElementById('termSelect');
             select.innerHTML = '';
-            deconstructorTermsData.forEach((item, index) => {
+
+            const filteredTerms = deconstructorTermsData.filter(item => std === 'all' || item.standard === std);
+
+            if (filteredTerms.length === 0) {
                 const opt = document.createElement('option');
-                opt.value = index;
+                opt.value = "-1";
+                opt.textContent = "No terms in standard";
+                select.appendChild(opt);
+                return;
+            }
+
+            filteredTerms.forEach((item, index) => {
+                const opt = document.createElement('option');
+                opt.value = deconstructorTermsData.indexOf(item);
                 opt.textContent = item.term;
                 select.appendChild(opt);
             });
         }
 
-        function loadDeconstruction() {
-            const index = document.getElementById('termSelect').value || 0;
-            const item = deconstructorTermsData[index];
+        function onDeconstructStandardChange() {
+            updateDeconstructorTerms();
+            loadDeconstruction();
+        }
 
+        function loadDeconstruction() {
+            const selectVal = document.getElementById('termSelect').value;
+            if (selectVal === "-1" || selectVal === "") return;
+
+            const item = deconstructorTermsData[selectVal];
+            const stdObj = standardsList.find(s => s.id === item.standard);
+
+            document.getElementById('deconstructCategory').textContent = stdObj ? stdObj.title : 'Standard Term Breakdown';
             document.getElementById('deconstructTerm').textContent = item.term;
             document.getElementById('deconstructMeaning').textContent = item.meaning;
 
@@ -579,12 +631,13 @@
 
         // FLASHCARDS LOGIC
         function initFlashcards() {
-            const filter = document.getElementById('flashcardCategory').value;
+            const filter = document.getElementById('flashcardStandard').value;
             currentFlashcards = [];
 
             dictionaryData.forEach(item => {
-                if (filter !== 'all' && item.type !== filter) return;
-                currentFlashcards.push({ term: item.word, def: item.meaning, cat: item.type.toUpperCase() });
+                if (filter !== 'all' && item.standard !== filter) return;
+                const stdObj = standardsList.find(s => s.id === item.standard);
+                currentFlashcards.push({ term: item.word, def: item.meaning, cat: stdObj ? stdObj.title.split(':')[0] : item.type.toUpperCase() });
             });
 
             currentFlashcards.sort(() => Math.random() - 0.5);
@@ -593,7 +646,12 @@
         }
 
         function showCard() {
-            if (currentFlashcards.length === 0) return;
+            if (currentFlashcards.length === 0) {
+                document.getElementById('cardTerm').textContent = "No Cards";
+                document.getElementById('cardDef').textContent = "Select another standard.";
+                document.getElementById('cardCounter').textContent = "0 of 0";
+                return;
+            }
             const card = currentFlashcards[currentCardIdx];
             document.getElementById('cardElement').classList.remove('card-flipped');
             document.getElementById('cardTerm').textContent = card.term;
