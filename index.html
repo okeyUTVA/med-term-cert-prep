@@ -3,796 +3,663 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medical Terminology • Certification Prep Center</title>
+    <title>Earth Science Interactive Map: Plate Tectonics, Volcanoes & Earthquakes</title>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, .font-heading { font-family: 'Outfit', sans-serif; }
-        .card-flip { perspective: 1000px; }
-        .card-inner { transition: transform 0.6s; transform-style: preserve-3d; }
-        .card-flipped .card-inner { transform: rotateY(180deg); }
-        .card-front, .card-back { backface-visibility: hidden; }
-        .card-back { transform: rotateY(180deg); }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        /* Custom scrollbar for drawer */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Pulse animation for earthquake markers */
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 0.3;
+            }
+            100% {
+                transform: scale(0.95);
+                opacity: 0.8;
+            }
+        }
+        .pulse-marker {
+            animation: pulse-ring 2.5s infinite ease-in-out;
+        }
+
+        .leaflet-container {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .drawer-panel {
+                max-height: 50vh;
+            }
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+<body class="bg-slate-900 text-slate-100 h-screen w-screen overflow-hidden flex flex-col font-sans">
 
-    <!-- HEADER & BRANDING -->
-    <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white border-b border-indigo-700/50 shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div>
-                    <div class="inline-flex items-center gap-2 bg-indigo-500/20 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-400/30 uppercase tracking-wider mb-2">
-                        <i class="fa-solid fa-notes-medical text-rose-400"></i> High School Medical Terminology
-                    </div>
-                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white flex items-center gap-3">
-                        🩺 Medical Terminology Certification Prep
-                    </h1>
-                    <p class="text-indigo-100 text-sm sm:text-base mt-1 max-w-2xl">
-                        10 Official Standards • Dictionary • Word Deconstructor • Flashcards • Practice Exam
-                    </p>
+    <!-- Header Navigation Bar -->
+    <header class="bg-slate-800 border-b border-slate-700 px-4 py-3 flex-none z-20 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            
+            <!-- App Title & Subtitle -->
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-amber-500/20 text-amber-400 rounded-lg border border-amber-500/30">
+                    <i data-lucide="globe" class="w-6 h-6"></i>
                 </div>
-                <div class="flex items-center gap-3 self-start md:self-auto bg-slate-800/60 p-3 rounded-xl border border-slate-700/60 backdrop-blur">
-                    <div class="text-center px-3 border-r border-slate-700">
-                        <span class="block text-2xl font-bold text-indigo-400">10</span>
-                        <span class="text-[10px] text-slate-400 uppercase tracking-wider">Standards</span>
-                    </div>
-                    <div class="text-center px-3 border-r border-slate-700">
-                        <span class="block text-2xl font-bold text-emerald-400">72%</span>
-                        <span class="text-[10px] text-slate-400 uppercase tracking-wider">Cut Score</span>
-                    </div>
-                    <div class="text-center px-3">
-                        <span class="block text-2xl font-bold text-amber-400">50</span>
-                        <span class="text-[10px] text-slate-400 uppercase tracking-wider">Exam Qs</span>
-                    </div>
+                <div>
+                    <h1 class="text-lg font-bold text-white leading-tight">Plate Tectonics & Volcanism Explorer</h1>
+                    <p class="text-xs text-slate-400">HS Earth Science Virtual Investigation</p>
                 </div>
             </div>
+
+            <!-- Inquiry Phase Stepper Controls -->
+            <div class="flex items-center bg-slate-900/80 p-1 rounded-xl border border-slate-700/80 shadow-inner">
+                <button id="btn-phase-1" onclick="setPhase(1)" class="phase-btn flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 text-amber-400 bg-slate-800 shadow-sm border border-slate-600">
+                    <span class="w-5 h-5 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 text-[10px] font-bold">1</span>
+                    <span class="hidden sm:inline">Volcanoes</span>
+                </button>
+                <div class="w-4 h-0.5 bg-slate-700"></div>
+                <button id="btn-phase-2" onclick="setPhase(2)" class="phase-btn flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 text-slate-400 hover:text-slate-200">
+                    <span class="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 text-[10px] font-bold">2</span>
+                    <span class="hidden sm:inline">+ Plate Boundaries</span>
+                </button>
+                <div class="w-4 h-0.5 bg-slate-700"></div>
+                <button id="btn-phase-3" onclick="setPhase(3)" class="phase-btn flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 text-slate-400 hover:text-slate-200">
+                    <span class="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 text-[10px] font-bold">3</span>
+                    <span class="hidden sm:inline">+ Earthquakes</span>
+                </button>
+            </div>
+
+            <!-- Header Action Toolbar -->
+            <div class="flex items-center space-x-2">
+                <!-- Base Map Selector -->
+                <div class="relative">
+                    <select id="basemap-select" onchange="changeBasemap(this.value)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs rounded-lg px-3 py-2 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer">
+                        <option value="topo" selected>Esri Topographic (Default)</option>
+                        <option value="satellite">Esri Satellite Imagery</option>
+                        <option value="dark">Dark Canvas (High Contrast)</option>
+                        <option value="ocean">Esri Ocean Basemap</option>
+                    </select>
+                </div>
+
+                <!-- Toggle Inquiry Drawer Button -->
+                <button onclick="toggleDrawer()" class="flex items-center space-x-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3 py-2 rounded-lg text-xs transition-colors shadow-sm">
+                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                    <span class="hidden md:inline">Investigation Guide</span>
+                </button>
+            </div>
+
         </div>
     </header>
 
-    <!-- NAVIGATION TABS -->
-    <nav class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex space-x-1 sm:space-x-4 overflow-x-auto custom-scrollbar py-2" id="navTabs">
-                <button onclick="switchTab('dictionary')" id="tab-dictionary" class="nav-btn px-4 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-all text-indigo-700 bg-indigo-50 border border-indigo-200">
-                    <i class="fa-solid fa-book-bookmark mr-2"></i>Standards Dictionary
-                </button>
-                <button onclick="switchTab('deconstructor')" id="tab-deconstructor" class="nav-btn px-4 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-all text-slate-600 hover:bg-slate-100">
-                    <i class="fa-solid fa-scissors mr-2"></i>Word Deconstructor
-                </button>
-                <button onclick="switchTab('flashcards')" id="tab-flashcards" class="nav-btn px-4 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-all text-slate-600 hover:bg-slate-100">
-                    <i class="fa-solid fa-layer-group mr-2"></i>Flashcard Decks
-                </button>
-                <button onclick="switchTab('exam')" id="tab-exam" class="nav-btn px-4 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-all text-slate-600 hover:bg-slate-100">
-                    <i class="fa-solid fa-user-doctor mr-2"></i>Practice Exam
-                </button>
+    <!-- Main Viewport Container -->
+    <div class="flex-1 relative flex overflow-hidden">
+
+        <!-- Map Container -->
+        <div id="map" class="w-full h-full z-0 bg-slate-950"></div>
+
+        <!-- Layer Toggle Quick Legend Floating Overlay (Top Left) -->
+        <div class="absolute top-4 left-4 z-10 bg-slate-900/90 backdrop-blur-md border border-slate-700/80 rounded-xl p-3 shadow-xl max-w-xs">
+            <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center justify-between">
+                <span>Active Layers</span>
+                <span id="current-phase-badge" class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/30">Phase 1</span>
+            </h2>
+            
+            <div class="space-y-2 text-xs">
+                <!-- Volcano Layer Control -->
+                <label class="flex items-center justify-between cursor-pointer group p-1 hover:bg-slate-800/50 rounded">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500 border border-amber-300 inline-block shadow-sm shadow-red-500/50"></span>
+                        <span class="text-slate-200 font-medium">Volcanoes (Active/Holocene)</span>
+                    </div>
+                    <input type="checkbox" id="layer-volcanoes" checked onchange="toggleLayer('volcanoes')" class="rounded border-slate-600 bg-slate-800 text-amber-500 focus:ring-amber-500 focus:ring-offset-slate-900">
+                </label>
+
+                <!-- Tectonic Boundaries Layer Control -->
+                <label class="flex items-center justify-between cursor-pointer group p-1 hover:bg-slate-800/50 rounded">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3.5 h-1 bg-cyan-400 inline-block rounded-full shadow-sm"></span>
+                        <span class="text-slate-200 font-medium">Plate Boundaries</span>
+                    </div>
+                    <input type="checkbox" id="layer-plates" onchange="toggleLayer('plates')" class="rounded border-slate-600 bg-slate-800 text-amber-500 focus:ring-amber-500 focus:ring-offset-slate-900">
+                </label>
+
+                <!-- Earthquakes Layer Control -->
+                <label class="flex items-center justify-between cursor-pointer group p-1 hover:bg-slate-800/50 rounded">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-purple-500 border border-purple-300 inline-block shadow-sm"></span>
+                        <span class="text-slate-200 font-medium">Earthquakes (M4.5+ Recent)</span>
+                    </div>
+                    <input type="checkbox" id="layer-earthquakes" onchange="toggleLayer('earthquakes')" class="rounded border-slate-600 bg-slate-800 text-amber-500 focus:ring-amber-500 focus:ring-offset-slate-900">
+                </label>
+            </div>
+
+            <!-- Tectonic Boundary Legend Detail -->
+            <div id="boundary-legend-detail" class="mt-3 pt-2 border-t border-slate-800 hidden text-[11px] space-y-1.5 text-slate-400">
+                <div class="font-semibold text-slate-300 mb-1">Boundary Types:</div>
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-1 bg-red-500 rounded"></span>
+                    <span>Convergent (Subduction/Collision)</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-1 bg-cyan-400 rounded"></span>
+                    <span>Divergent (Spreading Ridge)</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-1 bg-yellow-400 rounded"></span>
+                    <span>Transform (Strike-Slip)</span>
+                </div>
             </div>
         </div>
-    </nav>
 
-    <!-- MAIN CONTAINER -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-        <!-- SECTION 1: STANDARDS DICTIONARY -->
-        <section id="section-dictionary" class="tab-content space-y-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-900">Medical Terminology Standards Dictionary</h2>
-                    <p class="text-slate-500 text-sm">Select any of the 10 curriculum standards to filter terms, or search across all standards.</p>
+        <!-- Guided Inquiry Side Panel -->
+        <div id="inquiry-drawer" class="drawer-panel absolute right-0 top-0 bottom-0 w-full sm:w-96 bg-slate-900/95 backdrop-blur-md border-l border-slate-700/80 z-20 transition-transform duration-300 transform translate-x-0 flex flex-col shadow-2xl">
+            
+            <!-- Drawer Header -->
+            <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-800/50">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="compass" class="w-5 h-5 text-amber-400"></i>
+                    <h2 class="font-bold text-slate-200 text-sm">Student Guided Inquiry</h2>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <select id="dictStandardFilter" onchange="filterDictionary()" class="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white font-semibold text-slate-700 max-w-xs">
-                        <option value="all">All 10 Curriculum Standards</option>
-                    </select>
-
-                    <div class="relative">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="dictSearch" oninput="filterDictionary()" placeholder="Search word or meaning..." class="pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full sm:w-48">
-                    </div>
-
-                    <select id="typeFilter" onchange="filterDictionary()" class="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
-                        <option value="all">All Types</option>
-                        <option value="prefix">Prefixes</option>
-                        <option value="root">Combining Forms / Roots</option>
-                        <option value="suffix">Suffixes</option>
-                        <option value="term">Full Medical Terms</option>
-                    </select>
-                </div>
-            </div>
-
-            <div id="dictionaryContainer" class="space-y-6">
-                <!-- Dynamically populated by JS -->
-            </div>
-        </section>
-
-        <!-- SECTION 2: WORD DECONSTRUCTOR -->
-        <section id="section-deconstructor" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-900">Interactive Word Deconstructor</h2>
-                    <p class="text-slate-500 text-sm">Select a standard to view terms and break them down into Prefix + Root + Suffix.</p>
-                </div>
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <select id="deconstructStandardSelect" onchange="onDeconstructStandardChange()" class="px-4 py-2.5 border border-slate-300 font-semibold rounded-xl text-sm bg-white max-w-xs">
-                        <option value="all">All Standards</option>
-                    </select>
-
-                    <select id="termSelect" onchange="loadDeconstruction()" class="px-4 py-2.5 border border-indigo-200 bg-indigo-50 text-indigo-900 font-bold rounded-xl focus:ring-2 focus:ring-indigo-500 text-sm">
-                        <!-- Options populated dynamically -->
-                    </select>
-                </div>
-            </div>
-
-            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-md space-y-8">
-                <div class="text-center space-y-2">
-                    <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full" id="deconstructCategory">Standard Term Breakdown</span>
-                    <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2" id="deconstructTerm">Cardiomegaly</h3>
-                    <p class="text-lg text-indigo-700 font-medium italic" id="deconstructMeaning">Enlargement of the heart</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="deconstructPartsContainer">
-                    <!-- Prefix, Root, Suffix Cards Populated Here -->
-                </div>
-
-                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 text-sm space-y-2">
-                    <strong class="text-slate-800 text-base block"><i class="fa-solid fa-wand-magic-sparkles text-indigo-600 mr-2"></i>Deconstruction Formula Rule:</strong>
-                    <p class="text-slate-600 leading-relaxed" id="deconstructRule">To translate a medical term, start reading with the <strong>Suffix</strong> (the ending), move back to the <strong>Prefix</strong> (the beginning), and finish with the <strong>Root</strong> (the central structure).</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 3: FLASHCARD DECKS -->
-        <section id="section-flashcards" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-900">Medical Terminology Flashcards</h2>
-                    <p class="text-slate-500 text-sm">Review roots, prefixes, suffixes, and definitions by selecting any of the 10 standards.</p>
-                </div>
-                <div class="flex flex-wrap items-center gap-3">
-                    <select id="flashcardStandard" onchange="initFlashcards()" class="px-3 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white max-w-xs">
-                        <option value="all">All Standards</option>
-                    </select>
-                    <span class="text-sm font-medium text-slate-600" id="cardCounter">Card 1 of 0</span>
-                </div>
-            </div>
-
-            <div class="max-w-xl mx-auto">
-                <div id="cardElement" onclick="flipCard()" class="card-flip cursor-pointer min-h-[300px]">
-                    <div class="card-inner relative w-full h-full min-h-[300px] bg-white rounded-2xl shadow-lg border-2 border-indigo-500/20 p-8 flex flex-col items-center justify-center text-center">
-                        <div class="card-front absolute inset-0 p-8 flex flex-col items-center justify-center text-center bg-white rounded-2xl">
-                            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full mb-4" id="cardCategory">Category</span>
-                            <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mb-2" id="cardTerm">Term</h3>
-                            <p class="text-xs text-slate-400 mt-4"><i class="fa-solid fa-rotate mr-1"></i>Click card to flip</p>
-                        </div>
-                        <div class="card-back absolute inset-0 p-8 flex flex-col items-center justify-center text-center bg-slate-900 text-white rounded-2xl">
-                            <h4 class="text-lg sm:text-xl font-bold text-indigo-400 mb-2" id="cardDef">Definition</h4>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between gap-4 mt-6">
-                    <button onclick="prevCard()" class="px-4 py-2.5 bg-slate-200 text-slate-700 font-semibold rounded-lg hover:bg-slate-300 transition"><i class="fa-solid fa-arrow-left mr-2"></i>Previous</button>
-                    <div class="flex gap-2">
-                        <button onclick="markCard(false)" class="px-4 py-2.5 bg-rose-100 text-rose-700 font-semibold rounded-lg hover:bg-rose-200 transition"><i class="fa-solid fa-xmark mr-1"></i>Review</button>
-                        <button onclick="markCard(true)" class="px-4 py-2.5 bg-emerald-100 text-emerald-700 font-semibold rounded-lg hover:bg-emerald-200 transition"><i class="fa-solid fa-check mr-1"></i>Got It!</button>
-                    </div>
-                    <button onclick="nextCard()" class="px-4 py-2.5 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition">Next<i class="fa-solid fa-arrow-right ml-2"></i></button>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION 4: PRACTICE EXAM -->
-        <section id="section-exam" class="tab-content hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-900">Practice Exam</h2>
-                    <p class="text-slate-500 text-sm">50 Board-style Multiple Choice Questions • Cut score: 72%.</p>
-                </div>
-                <button onclick="startExam()" id="btnStartExam" class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition shadow-md">
-                    <i class="fa-solid fa-circle-play mr-2"></i>Begin 50-Question Exam
+                <button onclick="toggleDrawer()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-700/50 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
 
-            <div id="examContainer" class="hidden bg-white p-8 rounded-2xl border border-slate-200 shadow-lg space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-4">
-                    <span class="text-sm font-bold text-slate-600" id="examProgress">Question 1 of 50</span>
-                    <span class="text-xs font-semibold px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200" id="examTag">Medical Terminology</span>
+            <!-- Drawer Dynamic Content -->
+            <div class="p-5 overflow-y-auto flex-1 space-y-6 text-sm text-slate-300">
+                
+                <div id="inquiry-card" class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 space-y-3">
+                    <!-- Populated via Javascript -->
                 </div>
 
-                <h3 class="text-lg font-bold text-slate-900" id="examQuestionText">Question text...</h3>
-
-                <div class="space-y-3" id="examOptionsContainer">
-                    <!-- Dynamic options -->
+                <div class="space-y-2">
+                    <label for="student-notes" class="font-semibold text-slate-200 flex items-center space-x-1.5 text-xs">
+                        <i data-lucide="file-edit" class="w-4 h-4 text-amber-400"></i>
+                        <span>Investigation Log & Observations:</span>
+                    </label>
+                    <textarea id="student-notes" rows="6" placeholder="Type your observations and answers to the prompts here..." class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none leading-relaxed"></textarea>
+                    <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+                        <span id="save-status">Auto-saved to session</span>
+                        <button onclick="clearNotes()" class="text-slate-400 hover:text-amber-400 underline">Clear notes</button>
+                    </div>
                 </div>
 
-                <div class="flex items-center justify-between pt-4 border-t border-slate-200">
-                    <button onclick="prevExamQ()" id="btnPrevQ" class="px-4 py-2 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200">Previous</button>
-                    <button onclick="nextExamQ()" id="btnNextQ" class="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700">Next Question</button>
+                <div class="border-t border-slate-800 pt-4 text-xs text-slate-500 space-y-1">
+                    <div class="font-semibold text-slate-400 flex items-center space-x-1">
+                        <i data-lucide="award" class="w-3.5 h-3.5 text-slate-400"></i>
+                        <span>NGSS Alignment</span>
+                    </div>
+                    <p><strong>HS-ESS1-5:</strong> Evaluate evidence of plate tectonics and continental drift to reconstruct Earth history.</p>
+                    <p><strong>HS-ESS2-1:</strong> Develop a model to illustrate how Earth's internal and surface processes operate across spatial & temporal scales.</p>
                 </div>
+
             </div>
 
-            <!-- Exam Results Screen -->
-            <div id="examResults" class="hidden bg-white p-8 rounded-2xl border border-slate-200 shadow-xl space-y-6">
-                <div class="text-center space-y-3">
-                    <div id="badgePassFail" class="inline-block px-4 py-1.5 rounded-full font-bold text-sm">PASS</div>
-                    <h3 class="text-3xl font-extrabold text-slate-900" id="finalScoreText">Your Score: 80%</h3>
-                    <p class="text-slate-500 text-sm" id="scoreSubtext">You passed the Practice Exam!</p>
-                </div>
-
-                <div class="text-center pt-4">
-                    <button onclick="startExam()" class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition">
-                        Retake Practice Exam
-                    </button>
-                </div>
+            <!-- Drawer Footer Action -->
+            <div class="p-4 border-t border-slate-800 bg-slate-900/80 flex items-center justify-between">
+                <button id="prev-phase-btn" onclick="stepPhase(-1)" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed flex items-center space-x-1">
+                    <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                    <span>Previous</span>
+                </button>
+                <span id="drawer-phase-step" class="text-xs font-bold text-amber-400">Phase 1 of 3</span>
+                <button id="next-phase-btn" onclick="stepPhase(1)" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-lg text-xs font-bold flex items-center space-x-1 shadow-sm">
+                    <span>Next Phase</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </button>
             </div>
-        </section>
 
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="bg-slate-900 text-slate-400 text-xs border-t border-slate-800 py-6 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-2">
-            <p>Medical Terminology Certification Prep Center</p>
-            <p class="text-slate-500">Designed for High School CTE Students.</p>
         </div>
-    </footer>
 
-    <!-- SCRIPT DATA & LOGIC -->
+    </div>
+
+    <!-- Application Logic Script -->
     <script>
-        // ALL 10 OFFICIAL CURRICULUM STANDARDS
-        const standardsList = [
-            { id: "standard_1", title: "Standard 1: Word Structure & Component Parts" },
-            { id: "standard_2", title: "Standard 2: Anatomical Direction & Body Planes" },
-            { id: "standard_3", title: "Standard 3: Integumentary System Terminology" },
-            { id: "standard_4", title: "Standard 4: Skeletal & Muscular System Terminology" },
-            { id: "standard_5", title: "Standard 5: Cardiovascular & Blood System Terminology" },
-            { id: "standard_6", title: "Standard 6: Respiratory System Terminology" },
-            { id: "standard_7", title: "Standard 7: Digestive System Terminology" },
-            { id: "standard_8", title: "Standard 8: Urinary & Male Reproductive Systems" },
-            { id: "standard_9", title: "Standard 9: Female Reproductive System Terminology" },
-            { id: "standard_10", title: "Standard 10: Nervous System & Special Senses" }
-        ];
+        let map;
+        let currentPhase = 1;
+        let layers = {
+            volcanoes: null,
+            plates: null,
+            earthquakes: null
+        };
+        let tileLayers = {};
 
-        // DICTIONARY DATASET ACROSS ALL 10 STANDARDS
-        const dictionaryData = [
-            // Standard 1: Word Structure & Component Parts
-            { standard: "standard_1", word: "a- / an-", meaning: "without, absence of, lacking", type: "prefix" },
-            { standard: "standard_1", word: "dys-", meaning: "painful, difficult, abnormal", type: "prefix" },
-            { standard: "standard_1", word: "hyper-", meaning: "excessive, above normal", type: "prefix" },
-            { standard: "standard_1", word: "hypo-", meaning: "deficient, below normal", type: "prefix" },
-            { standard: "standard_1", word: "-itis", meaning: "inflammation", type: "suffix" },
-            { standard: "standard_1", word: "-megaly", meaning: "enlargement", type: "suffix" },
-            { standard: "standard_1", word: "-ology", meaning: "study of", type: "suffix" },
-            { standard: "standard_1", word: "-oma", meaning: "tumor, mass", type: "suffix" },
-
-            // Standard 2: Directional & Anatomical Terms
-            { standard: "standard_2", word: "ab-", meaning: "away from midline", type: "prefix" },
-            { standard: "standard_2", word: "ad-", meaning: "toward midline", type: "prefix" },
-            { standard: "standard_2", word: "ante-", meaning: "before, forward", type: "prefix" },
-            { standard: "standard_2", word: "epi-", meaning: "upon, over, above", type: "prefix" },
-            { standard: "standard_2", word: "inter-", meaning: "between", type: "prefix" },
-            { standard: "standard_2", word: "intra-", meaning: "within, inside", type: "prefix" },
-            { standard: "standard_2", word: "sub-", meaning: "under, below", type: "prefix" },
-
-            // Standard 3: Integumentary System Terminology
-            { standard: "standard_3", word: "dermat/o or derm/o", meaning: "skin", type: "root" },
-            { standard: "standard_3", word: "cutan/o", meaning: "skin layer", type: "root" },
-            { standard: "standard_3", word: "hidr/o", meaning: "sweat gland", type: "root" },
-            { standard: "standard_3", word: "Dermatitis", meaning: "Inflammation of the skin", type: "term" },
-            { standard: "standard_3", word: "Subcutaneous", meaning: "Pertaining to beneath the skin layer", type: "term" },
-
-            // Standard 4: Skeletal & Muscular System Terminology
-            { standard: "standard_4", word: "arthr/o", meaning: "joint", type: "root" },
-            { standard: "standard_4", word: "chondr/o", meaning: "cartilage", type: "root" },
-            { standard: "standard_4", word: "my/o", meaning: "muscle", type: "root" },
-            { standard: "standard_4", word: "oste/o", meaning: "bone", type: "root" },
-            { standard: "standard_4", word: "Osteoarthritis", meaning: "Inflammation of bone and joint tissue", type: "term" },
-
-            // Standard 5: Cardiovascular & Blood System Terminology
-            { standard: "standard_5", word: "cardi/o", meaning: "heart", type: "root" },
-            { standard: "standard_5", word: "hem/o or hemat/o", meaning: "blood", type: "root" },
-            { standard: "standard_5", word: "brady-", meaning: "slow", type: "prefix" },
-            { standard: "standard_5", word: "tachy-", meaning: "fast, rapid", type: "prefix" },
-            { standard: "standard_5", word: "-emia", meaning: "blood condition", type: "suffix" },
-            { standard: "standard_5", word: "Cardiomegaly", meaning: "Enlargement of the heart", type: "term" },
-            { standard: "standard_5", word: "Tachycardia", meaning: "Abnormally fast heart rate", type: "term" },
-            { standard: "standard_5", word: "Bradycardia", meaning: "Abnormally slow heart rate", type: "term" },
-
-            // Standard 6: Respiratory System Terminology
-            { standard: "standard_6", word: "pneumon/o or pulmon/o", meaning: "lung, air", type: "root" },
-            { standard: "standard_6", word: "rhin/o", meaning: "nose", type: "root" },
-            { standard: "standard_6", word: "Dyspnea", meaning: "Painful or difficult breathing", type: "term" },
-            { standard: "standard_6", word: "Rhinoplasty", meaning: "Surgical repair of the nose", type: "term" },
-
-            // Standard 7: Digestive System Terminology
-            { standard: "standard_7", word: "gastr/o", meaning: "stomach", type: "root" },
-            { standard: "standard_7", word: "hepat/o", meaning: "liver", type: "root" },
-            { standard: "standard_7", word: "Gastroenteritis", meaning: "Inflammation of stomach and intestines", type: "term" },
-
-            // Standard 8: Urinary & Male Reproductive Systems
-            { standard: "standard_8", word: "nephr/o or ren/o", meaning: "kidney", type: "root" },
-            { standard: "standard_8", word: "orchi/o", meaning: "testis", type: "root" },
-            { standard: "standard_8", word: "Nephrectomy", meaning: "Surgical removal of a kidney", type: "term" },
-
-            // Standard 9: Female Reproductive System Terminology
-            { standard: "standard_9", word: "hyster/o or uter/o", meaning: "uterus", type: "root" },
-            { standard: "standard_9", word: "oophor/o", meaning: "ovary", type: "root" },
-            { standard: "standard_9", word: "Hysterectomy", meaning: "Surgical removal of the uterus", type: "term" },
-
-            // Standard 10: Nervous System & Special Senses
-            { standard: "standard_10", word: "neur/o", meaning: "nerve", type: "root" },
-            { standard: "standard_10", word: "encephal/o", meaning: "brain", type: "root" },
-            { standard: "standard_10", word: "Neuropathy", meaning: "Disease condition of the nerves", type: "term" }
-        ];
-
-        // DECONSTRUCTOR TERMS FOR ALL 10 STANDARDS
-        const deconstructorTermsData = [
-            {
-                standard: "standard_1",
-                term: "Endoscopy",
-                meaning: "Visual examination process inside the body",
-                prefix: { text: "Endo-", meaning: "Within / Inside" },
-                root: { text: "None", meaning: "Prefix connects to suffix root" },
-                suffix: { text: "-scopy", meaning: "Visual examination process" }
+        const phaseGuides = {
+            1: {
+                title: "Phase 1: Geographic Distribution of Volcanoes",
+                badge: "Phase 1: Observation",
+                subtitle: "Observe global patterns without boundaries or other data.",
+                prompts: [
+                    "Examine the red volcanic markers across the globe. Are volcanoes distributed randomly, or do they form distinct belts?",
+                    "Identify the massive ring-shaped arrangement surrounding the Pacific Ocean. What is this famous geological feature called?",
+                    "Look for isolated clusters of volcanoes in the middle of oceans (e.g., the Hawaiian chain). How might these differ from coastal lines?"
+                ],
+                recommendedLayers: { volcanoes: true, plates: false, earthquakes: false }
             },
-            {
-                standard: "standard_2",
-                term: "Subcutaneous",
-                meaning: "Pertaining to beneath the skin layer",
-                prefix: { text: "Sub-", meaning: "Under / Below" },
-                root: { text: "Cutan/o", meaning: "Skin" },
-                suffix: { text: "-ous", meaning: "Pertaining to" }
+            2: {
+                title: "Phase 2: Overlapping Plate Tectonic Boundaries",
+                badge: "Phase 2: Plate Alignment",
+                subtitle: "Analyze how tectonic boundaries correspond with volcanic activity.",
+                prompts: [
+                    "Observe where the colored boundary lines fall relative to the red volcano icons.",
+                    "Which type of boundary line (Red = Convergent, Cyan = Divergent, Yellow = Transform) has the highest concentration of explosive volcanoes?",
+                    "Compare the Mid-Atlantic Ridge (cyan line down the Atlantic Ocean) with the western coast of South America (red line). What differences do you notice in volcanic density?"
+                ],
+                recommendedLayers: { volcanoes: true, plates: true, earthquakes: false }
             },
-            {
-                standard: "standard_3",
-                term: "Dermatitis",
-                meaning: "Inflammation of the skin",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Dermat/o", meaning: "Skin" },
-                suffix: { text: "-itis", meaning: "Inflammation" }
-            },
-            {
-                standard: "standard_4",
-                term: "Osteoarthritis",
-                meaning: "Inflammation of bone and joint tissue",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Oste/o + Arthr/o", meaning: "Bone + Joint" },
-                suffix: { text: "-itis", meaning: "Inflammation" }
-            },
-            {
-                standard: "standard_5",
-                term: "Cardiomegaly",
-                meaning: "Enlargement of the heart",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Cardi/o", meaning: "Heart" },
-                suffix: { text: "-megaly", meaning: "Enlargement" }
-            },
-            {
-                standard: "standard_5",
-                term: "Tachycardia",
-                meaning: "Abnormally rapid heart rate",
-                prefix: { text: "Tachy-", meaning: "Fast / Rapid" },
-                root: { text: "Cardi/o", meaning: "Heart" },
-                suffix: { text: "-ia", meaning: "Condition" }
-            },
-            {
-                standard: "standard_5",
-                term: "Bradycardia",
-                meaning: "Abnormally slow heart rate",
-                prefix: { text: "Brady-", meaning: "Slow" },
-                root: { text: "Cardi/o", meaning: "Heart" },
-                suffix: { text: "-ia", meaning: "Condition" }
-            },
-            {
-                standard: "standard_6",
-                term: "Dyspnea",
-                meaning: "Painful or difficult breathing",
-                prefix: { text: "Dys-", meaning: "Painful / Difficult / Abnormal" },
-                root: { text: "-pnea", meaning: "Breathing / Respiration" },
-                suffix: { text: "None", meaning: "Combined into root/suffix form" }
-            },
-            {
-                standard: "standard_6",
-                term: "Rhinoplasty",
-                meaning: "Surgical repair of the nose",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Rhin/o", meaning: "Nose" },
-                suffix: { text: "-plasty", meaning: "Surgical repair" }
-            },
-            {
-                standard: "standard_7",
-                term: "Gastroenteritis",
-                meaning: "Inflammation of the stomach and intestines",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Gastr/o + Enter/o", meaning: "Stomach + Intestines" },
-                suffix: { text: "-itis", meaning: "Inflammation" }
-            },
-            {
-                standard: "standard_8",
-                term: "Nephrectomy",
-                meaning: "Surgical removal of a kidney",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Nephr/o", meaning: "Kidney" },
-                suffix: { text: "-ectomy", meaning: "Surgical removal / Excision" }
-            },
-            {
-                standard: "standard_9",
-                term: "Hysterectomy",
-                meaning: "Surgical removal of the uterus",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Hyster/o", meaning: "Uterus" },
-                suffix: { text: "-ectomy", meaning: "Surgical removal / Excision" }
-            },
-            {
-                standard: "standard_10",
-                term: "Neuropathy",
-                meaning: "Disease condition of the nerves",
-                prefix: { text: "None", meaning: "No prefix present" },
-                root: { text: "Neur/o", meaning: "Nerve" },
-                suffix: { text: "-pathy", meaning: "Disease condition" }
+            3: {
+                title: "Phase 3: Integrating Seismic Activity (Earthquakes)",
+                badge: "Phase 3: Full Synthesis",
+                subtitle: "Combine Earth's major dynamic systems: Volcanoes, Plates, and Seismic energy.",
+                prompts: [
+                    "Where do earthquake epicenters (purple rings) occur compared to tectonic boundaries and volcanoes?",
+                    "Do earthquakes occur along all plate boundary types, or primarily specific ones?",
+                    "Synthesis Question: How does plate tectonic theory explain why volcanoes, earthquakes, and deep ocean trenches occur in the exact same geographic locations?"
+                ],
+                recommendedLayers: { volcanoes: true, plates: true, earthquakes: true }
             }
+        };
+
+        const VOLCANOES_DATA = [
+            { name: "Mount St. Helens", country: "United States", type: "Stratovolcano", elevation: 2549, lat: 46.1914, lng: -122.1956 },
+            { name: "Mount Rainier", country: "United States", type: "Stratovolcano", elevation: 4392, lat: 46.8523, lng: -121.7603 },
+            { name: "Mount Shasta", country: "United States", type: "Stratovolcano", elevation: 4317, lat: 41.4092, lng: -122.1949 },
+            { name: "Popocatépetl", country: "Mexico", type: "Stratovolcano", elevation: 5426, lat: 19.0225, lng: -98.6278 },
+            { name: "Colima", country: "Mexico", type: "Stratovolcano", elevation: 3820, lat: 19.5120, lng: -103.6170 },
+            { name: "Fuego", country: "Guatemala", type: "Stratovolcano", elevation: 3763, lat: 14.4730, lng: -90.8800 },
+            { name: "Cotopaxi", country: "Ecuador", type: "Stratovolcano", elevation: 5897, lat: -0.6770, lng: -78.4360 },
+            { name: "Galeras", country: "Colombia", type: "Stratovolcano", elevation: 4276, lat: 1.2200, lng: -77.3580 },
+            { name: "Villarrica", country: "Chile", type: "Stratovolcano", elevation: 2847, lat: -39.4200, lng: -71.9300 },
+            { name: "Nevado del Ruiz", country: "Colombia", type: "Stratovolcano", elevation: 5321, lat: 4.8920, lng: -75.3240 },
+            { name: "Fuji", country: "Japan", type: "Stratovolcano", elevation: 3776, lat: 35.3606, lng: 138.7274 },
+            { name: "Sakurajima", country: "Japan", type: "Caldera", elevation: 1117, lat: 31.5930, lng: 130.6570 },
+            { name: "Mount Pinatubo", country: "Philippines", type: "Stratovolcano", elevation: 1486, lat: 15.1429, lng: 120.3500 },
+            { name: "Mayon", country: "Philippines", type: "Stratovolcano", elevation: 2463, lat: 13.2570, lng: 123.6850 },
+            { name: "Krakatoa", country: "Indonesia", type: "Caldera", elevation: 813, lat: -6.1020, lng: 105.4230 },
+            { name: "Mount Merapi", country: "Indonesia", type: "Stratovolcano", elevation: 2910, lat: -7.5400, lng: 110.4460 },
+            { name: "Mount Tambora", country: "Indonesia", type: "Stratovolcano", elevation: 2850, lat: -8.2500, lng: 117.9900 },
+            { name: "Taupo", country: "New Zealand", type: "Supervolcano", elevation: 357, lat: -38.8060, lng: 175.9000 },
+            { name: "White Island", country: "New Zealand", type: "Stratovolcano", elevation: 321, lat: -37.5200, lng: 177.1800 },
+            { name: "Klyuchevskoy", country: "Russia", type: "Stratovolcano", elevation: 4750, lat: 56.0570, lng: 160.6380 },
+            { name: "Kilauea", country: "United States (Hawaii)", type: "Shield Volcano", elevation: 1247, lat: 19.4210, lng: -155.2870 },
+            { name: "Mauna Loa", country: "United States (Hawaii)", type: "Shield Volcano", elevation: 4169, lat: 19.4750, lng: -155.6080 },
+            { name: "Eyjafjallajökull", country: "Iceland", type: "Stratovolcano", elevation: 1666, lat: 63.6300, lng: -19.6200 },
+            { name: "Fagradalsfjall", country: "Iceland", type: "Shield Volcano", elevation: 385, lat: 63.9030, lng: -22.2730 },
+            { name: "Piton de la Fournaise", country: "Reunion", type: "Shield Volcano", elevation: 2632, lat: -21.2440, lng: 55.7080 },
+            { name: "Mount Etna", country: "Italy", type: "Stratovolcano", elevation: 3357, lat: 37.7510, lng: 14.9930 },
+            { name: "Mount Vesuvius", country: "Italy", type: "Complex Volcano", elevation: 1281, lat: 40.8210, lng: 14.4260 },
+            { name: "Stromboli", country: "Italy", type: "Stratovolcano", elevation: 926, lat: 38.7890, lng: 15.2130 },
+            { name: "Erta Ale", country: "Ethiopia", type: "Shield Volcano", elevation: 613, lat: 13.6000, lng: 40.6700 },
+            { name: "Mount Nyiragongo", country: "DR Congo", type: "Stratovolcano", elevation: 3470, lat: -1.5200, lng: 29.2500 },
+            { name: "Mount Erebus", country: "Antarctica", type: "Stratovolcano", elevation: 3794, lat: -77.5300, lng: 167.1700 }
         ];
 
-        // 50 EXAM QUESTIONS DATASET
-        const examQuestionsData = [
-            { q: "Which combining form refers to the heart?", opts: ["Arthr/o", "Cardi/o", "Nephr/o", "Gastr/o"], ans: 1 },
-            { q: "The suffix -itis indicates:", opts: ["Surgical removal", "Enlargement", "Inflammation", "Pain"], ans: 2 },
-            { q: "The prefix brady- means:", opts: ["Fast", "Slow", "Painful", "Difficult"], ans: 1 },
-            { q: "Which word part means 'enlargement'?", opts: ["-megaly", "-oma", "-scopy", "-plasty"], ans: 0 },
-            { q: "The prefix tachy- means:", opts: ["Slow", "Rapid or fast", "Under", "Around"], ans: 1 },
-            { q: "Which root word refers to the liver?", opts: ["Ren/o", "Hepat/o", "Encephal/o", "Pneumon/o"], ans: 1 },
-            { q: "The suffix -ectomy means:", opts: ["Surgical creation of an opening", "Incision", "Surgical removal", "Visual examination"], ans: 2 },
-            { q: "Which prefix means 'below' or 'deficient'?", opts: ["Hyper-", "Hypo-", "Tachy-", "Poly-"], ans: 1 },
-            { q: "The word root for bone is:", opts: ["Oste/o", "Chondr/o", "My/o", "Arthr/o"], ans: 0 },
-            { q: "The suffix -plasty refers to:", opts: ["Surgical repair", "Inflammation", "Disease", "Pain"], ans: 0 },
-            { q: "Dyspnea means:", opts: ["Rapid heart rate", "Difficult or painful breathing", "Inflammation of skin", "Blood condition"], ans: 1 },
-            { q: "Which combining form means 'kidney'?", opts: ["Ren/o or Nephr/o", "Gastr/o", "Hepat/o", "Dermat/o"], ans: 0 },
-            { q: "The suffix -scopy means:", opts: ["Process of visual examination", "Surgical puncture", "Tumor", "Enlargement"], ans: 0 },
-            { q: "Which prefix means 'between'?", opts: ["Intra-", "Inter-", "Peri-", "Epi-"], ans: 1 },
-            { q: "Neuropathy is best defined as:", opts: ["Surgical repair of a nerve", "Disease condition of the nerves", "Inflammation of a joint", "Nerve tumor"], ans: 1 },
-            { q: "The combining form gastr/o means:", opts: ["Stomach", "Intestine", "Esophagus", "Mouth"], ans: 0 },
-            { q: "Which suffix means 'pain'?", opts: ["-emia", "-algia", "-oma", "-osis"], ans: 1 },
-            { q: "Subcutaneous means:", opts: ["Above the skin", "Under or below the skin", "Through the skin", "Around the skin"], ans: 1 },
-            { q: "The prefix anti- means:", opts: ["Before", "Against", "After", "Excessive"], ans: 1 },
-            { q: "Rhinoplasty is surgical repair of the:", opts: ["Ear", "Eye", "Nose", "Joint"], ans: 2 },
-            { q: "Which suffix means 'tumor or mass'?", opts: ["-oma", "-itis", "-emia", "-opathy"], ans: 0 },
-            { q: "Polyuria means:", opts: ["Difficult urination", "Excessive urination", "Absence of urine", "Blood in urine"], ans: 1 },
-            { q: "The word element arthr/o means:", opts: ["Bone", "Joint", "Cartilage", "Muscle"], ans: 1 },
-            { q: "The prefix peri- means:", opts: ["Surrounding or around", "Inside", "Above", "Across"], ans: 0 },
-            { q: "Encephal/o refers to the:", opts: ["Head", "Brain", "Spinal cord", "Nerve"], ans: 1 },
-            { q: "Hyperglycemia indicates:", opts: ["Low blood pressure", "Excessive sugar in the blood", "Slow heart rate", "High cell count"], ans: 1 },
-            { q: "The suffix -stomy means:", opts: ["Cutting into", "Surgical creation of a new opening", "Removal of fluid", "Surgical repair"], ans: 1 },
-            { q: "Gastroenteritis involves inflammation of:", opts: ["Stomach and liver", "Stomach and intestines", "Intestines and colon", "Esophagus and stomach"], ans: 1 },
-            { q: "My/o is the combining form for:", opts: ["Marrow", "Muscle", "Fasciitis", "Nerve"], ans: 1 },
-            { q: "Which prefix means 'inside' or 'within'?", opts: ["Exo-", "Endo-", "Epi-", "Trans-"], ans: 1 },
-            { q: "Hemat/o or hem/o refers to:", opts: ["Blood", "Liver", "Tissue", "Sweat"], ans: 0 },
-            { q: "The suffix -centesis means:", opts: ["Surgical puncture to withdraw fluid", "Incision", "Excision", "Binding"], ans: 0 },
-            { q: "Dermatitis is:", opts: ["Skin tumor", "Inflammation of the skin", "Fungal infection", "Dry skin"], ans: 1 },
-            { q: "Osteoarthritis affects:", opts: ["Bones and joints", "Muscles and tendons", "Nerves and brain", "Skin and tissue"], ans: 0 },
-            { q: "The prefix a- or an- means:", opts: ["With", "Without or absence of", "Against", "Around"], ans: 1 },
-            { q: "Pneumon/o or pulmon/o refers to:", opts: ["Heart", "Lungs", "Chest wall", "Diaphragm"], ans: 1 },
-            { q: "The combining form cyt/o means:", opts: ["Cell", "Tissue", "Organ", "System"], ans: 0 },
-            { q: "Postoperative means:", opts: ["Before surgery", "During surgery", "After surgery", "Without surgery"], ans: 2 },
-            { q: "Which combining form means 'cartilage'?", opts: ["Oste/o", "Chondr/o", "Arthr/o", "My/o"], ans: 1 },
-            { q: "The suffix -emia refers to:", opts: ["Blood condition", "Tissue condition", "Urine condition", "Skin condition"], ans: 0 },
-            { q: "The prefix macro- means:", opts: ["Small", "Large", "New", "Many"], ans: 1 },
-            { q: "Neoplasm means:", opts: ["Old growth", "New growth or tumor", "Inflammation", "Deformity"], ans: 1 },
-            { q: "The combining form thorac/o means:", opts: ["Abdomen", "Chest", "Pelvis", "Head"], ans: 1 },
-            { q: "Cardiomegaly is best defined as:", opts: ["Heart attack", "Enlargement of the heart", "Surgical repair of heart", "Slow heart rate"], ans: 1 },
-            { q: "Transdermal means:", opts: ["Across or through the skin", "Under the skin", "Above the skin", "Around the skin"], ans: 0 },
-            { q: "Path/o is the combining form for:", opts: ["Disease", "Pathogenic bacteria", "Structure", "Sensation"], ans: 0 },
-            { q: "The combining form hist/o refers to:", opts: ["Cells", "Tissues", "Organs", "Blood"], ans: 1 },
-            { q: "Cephal/o means:", opts: ["Head", "Neck", "Chest", "Brain"], ans: 0 },
-            { q: "The suffix -tomy means:", opts: ["Incision or cutting into", "Excision", "Removal", "Repair"], ans: 0 },
-            { q: "Which term translates to 'visual examination inside a body cavity'?", opts: ["Endoscopy", "Exoscopy", "Endectomy", "Endostomy"], ans: 0 }
+        // Complete, High-Precision Tectonic Plate Boundaries Dataset
+        const ACCURATE_BOUNDARIES = [
+            // PACIFIC RING OF FIRE - SUBDUCTION ZONES (CONVERGENT)
+            { type: 'Convergent', name: "Aleutian Trench", coords: [[54, -165], [53, -170], [52, -175], [51, 180], [51, 175], [53, 168], [55, 163]] },
+            { type: 'Convergent', name: "Kuril-Kamchatka Trench", coords: [[55, 163], [50, 157], [45, 151], [40, 144]] },
+            { type: 'Convergent', name: "Japan & Izu-Bonin Trench", coords: [[40, 144], [35, 141], [30, 141], [25, 143], [20, 145]] },
+            { type: 'Convergent', name: "Mariana Trench", coords: [[20, 145], [15, 147], [11, 143], [10, 140]] },
+            { type: 'Convergent', name: "Philippine Trench", coords: [[18, 123], [14, 125], [10, 126], [6, 127]] },
+            { type: 'Convergent', name: "Sunda (Java) Trench", coords: [[6, 94], [3, 96], [-2, 100], [-6, 105], [-9, 112], [-11, 120]] },
+            { type: 'Convergent', name: "Kermadec-Tonga Trench", coords: [[-15, -173], [-20, -175], [-25, -176], [-30, -178], [-35, -179], [-40, 177]] },
+            { type: 'Convergent', name: "Cascadia Subduction Zone", coords: [[50, -128], [47, -125], [43, -124], [40, -124]] },
+            { type: 'Convergent', name: "Middle America Trench", coords: [[20, -106], [16, -99], [13, -91], [9, -84]] },
+            { type: 'Convergent', name: "Peru-Chile (Atacama) Trench", coords: [[8, -78], [2, -79], [-5, -81], [-12, -78], [-20, -71], [-30, -72], [-40, -74], [-50, -75], [-55, -67]] },
+
+            // DIVERGENT BOUNDARIES (SPREADING RIDGES)
+            { type: 'Divergent', name: "Mid-Atlantic Ridge (North)", coords: [[85, 0], [75, 10], [70, -15], [65, -18], [55, -35], [45, -28], [30, -41], [15, -45], [0, -25]] },
+            { type: 'Divergent', name: "Mid-Atlantic Ridge (South)", coords: [[0, -25], [-10, -14], [-20, -13], [-30, -14], [-40, -17], [-50, -28], [-54, -2]] },
+            { type: 'Divergent', name: "East Pacific Rise", coords: [[23, -108], [15, -105], [0, -103], [-10, -110], [-20, -114], [-30, -112], [-40, -115], [-55, -130]] },
+            { type: 'Divergent', name: "Southeast Indian Ridge", coords: [[-25, 70], [-35, 80], [-45, 100], [-50, 120], [-52, 140]] },
+            { type: 'Divergent', name: "Southwest Indian Ridge", coords: [[-25, 70], [-35, 55], [-45, 35], [-54, -2]] },
+            { type: 'Divergent', name: "Carlsberg & Central Indian Ridge", coords: [[12, 44], [5, 60], [-10, 67], [-25, 70]] },
+            { type: 'Divergent', name: "East African Rift System", coords: [[12, 43], [8, 39], [2, 36], [-5, 35], [-15, 35]] },
+
+            // TRANSFORM BOUNDARIES (STRIKE-SLIP FAULTS)
+            { type: 'Transform', name: "San Andreas Fault System", coords: [[40, -124], [38, -122], [35, -119], [33, -116], [31, -114]] },
+            { type: 'Transform', name: "Alpine Fault (New Zealand)", coords: [[-41, 171], [-43, 170], [-45, 167]] },
+            { type: 'Transform', name: "North Anatolian Fault", coords: [[41, 28], [40, 33], [39, 39]] },
+            { type: 'Transform', name: "Dead Sea Transform", coords: [[28, 34], [31, 35], [34, 36]] },
+
+            // CONTINENTAL COLLISION ZONES (CONVERGENT)
+            { type: 'Convergent', name: "Himalayan Collision Zone", coords: [[35, 75], [33, 80], [28, 85], [27, 92], [25, 96]] },
+            { type: 'Convergent', name: "Alpine-Zagros Collision Belt", coords: [[45, 7], [46, 13], [42, 20], [38, 45], [30, 52]] }
         ];
 
-        // STATE VARIABLES
-        let activeTab = 'dictionary';
-        let currentFlashcards = [];
-        let currentCardIdx = 0;
-
-        let examQuestions = [];
-        let currentExamIdx = 0;
-        let userExamAnswers = [];
-
-        // INITIALIZATION
-        window.addEventListener('DOMContentLoaded', () => {
-            populateStandardDropdowns();
-            renderDictionary();
-            updateDeconstructorTerms();
-            loadDeconstruction();
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            initMap();
+            loadNotes();
+            setPhase(1);
         });
 
-        function populateStandardDropdowns() {
-            const dictSelect = document.getElementById('dictStandardFilter');
-            const deconstructSelect = document.getElementById('deconstructStandardSelect');
-            const flashSelect = document.getElementById('flashcardStandard');
-
-            standardsList.forEach(std => {
-                const opt1 = document.createElement('option');
-                opt1.value = std.id;
-                opt1.textContent = std.title;
-                dictSelect.appendChild(opt1);
-
-                const opt2 = document.createElement('option');
-                opt2.value = std.id;
-                opt2.textContent = std.title;
-                deconstructSelect.appendChild(opt2);
-
-                const opt3 = document.createElement('option');
-                opt3.value = std.id;
-                opt3.textContent = std.title;
-                flashSelect.appendChild(opt3);
+        function initMap() {
+            map = L.map('map', {
+                center: [20, 10],
+                zoom: 2.5,
+                minZoom: 2,
+                maxZoom: 18,
+                zoomControl: false
             });
+
+            L.control.zoom({ position: 'bottomleft' }).addTo(map);
+
+            tileLayers = {
+                topo: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), swisstopo, MapmyIndia, &copy; OpenStreetMap contributors',
+                    maxZoom: 18
+                }),
+                dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                    subdomains: 'abcd',
+                    maxZoom: 19
+                }),
+                satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+                    maxZoom: 18
+                }),
+                ocean: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUSB',
+                    maxZoom: 13
+                })
+            };
+
+            tileLayers.topo.addTo(map);
+
+            layers.volcanoes = L.layerGroup();
+            layers.plates = L.layerGroup();
+            layers.earthquakes = L.layerGroup();
+
+            buildVolcanoLayer();
+            drawPlateBoundaries();
+            fetchEarthquakeData();
         }
 
-        function switchTab(tabId) {
-            activeTab = tabId;
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.className = 'nav-btn px-4 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-all text-slate-600 hover:bg-slate-100';
+        function changeBasemap(key) {
+            Object.keys(tileLayers).forEach(k => {
+                if (map.hasLayer(tileLayers[k])) {
+                    map.removeLayer(tileLayers[k]);
+                }
             });
-
-            document.getElementById(`section-${tabId}`).classList.remove('hidden');
-            const activeBtn = document.getElementById(`tab-${tabId}`);
-            activeBtn.className = 'nav-btn px-4 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-all text-indigo-700 bg-indigo-50 border border-indigo-200';
-
-            if (tabId === 'flashcards') initFlashcards();
-            if (tabId === 'deconstructor') {
-                updateDeconstructorTerms();
-                loadDeconstruction();
+            if (tileLayers[key]) {
+                tileLayers[key].addTo(map);
             }
         }
 
-        // DICTIONARY LOGIC
-        function renderDictionary() {
-            const container = document.getElementById('dictionaryContainer');
-            const stdFilter = document.getElementById('dictStandardFilter').value;
-            const typeFilter = document.getElementById('typeFilter').value;
-            const query = document.getElementById('dictSearch').value.toLowerCase();
+        function buildVolcanoLayer() {
+            VOLCANOES_DATA.forEach(volcano => {
+                const marker = L.circleMarker([volcano.lat, volcano.lng], {
+                    radius: 6,
+                    fillColor: '#ef4444',
+                    color: '#fef08a',
+                    weight: 1.5,
+                    opacity: 0.9,
+                    fillOpacity: 0.85
+                });
 
-            container.innerHTML = '';
-
-            const filtered = dictionaryData.filter(item => {
-                const matchesStd = stdFilter === 'all' || item.standard === stdFilter;
-                const matchesType = typeFilter === 'all' || item.type === typeFilter;
-                const matchesQuery = item.word.toLowerCase().includes(query) || item.meaning.toLowerCase().includes(query);
-                return matchesStd && matchesType && matchesQuery;
-            });
-
-            if (filtered.length === 0) {
-                container.innerHTML = `<p class="text-slate-500 text-center py-8 font-medium">No terms or word elements matched your selected standard and search filters.</p>`;
-                return;
-            }
-
-            let html = `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">`;
-            filtered.forEach(item => {
-                let badgeClass = "bg-indigo-100 text-indigo-800";
-                if (item.type === "prefix") badgeClass = "bg-amber-100 text-amber-800";
-                if (item.type === "suffix") badgeClass = "bg-rose-100 text-rose-800";
-                if (item.type === "term") badgeClass = "bg-emerald-100 text-emerald-800";
-
-                const stdObj = standardsList.find(s => s.id === item.standard);
-                const stdLabel = stdObj ? stdObj.title.split(':')[0] : 'Standard';
-
-                html += `
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-2">
-                        <div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${badgeClass}">${item.type}</span>
-                                <span class="text-[10px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">${stdLabel}</span>
-                            </div>
-                            <h4 class="font-bold text-lg text-slate-900 mt-2">${item.word}</h4>
-                            <p class="text-sm text-slate-600">${item.meaning}</p>
+                const popupContent = `
+                    <div class="p-1 text-slate-800">
+                        <div class="flex items-center space-x-1.5 text-red-600 font-bold text-xs uppercase tracking-wide">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 0 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6Z"/></svg>
+                            <span>Volcano</span>
+                        </div>
+                        <h3 class="font-bold text-sm text-slate-900 mt-0.5">${volcano.name}</h3>
+                        <div class="text-xs text-slate-600 mt-1 space-y-0.5">
+                            <div><strong>Country:</strong> ${volcano.country}</div>
+                            <div><strong>Type:</strong> ${volcano.type}</div>
+                            <div><strong>Elevation:</strong> ${volcano.elevation.toLocaleString()} meters</div>
+                            <div><strong>Coordinates:</strong> ${volcano.lat.toFixed(2)}°, ${volcano.lng.toFixed(2)}°</div>
                         </div>
                     </div>
                 `;
+
+                marker.bindPopup(popupContent);
+                layers.volcanoes.addLayer(marker);
             });
-            html += `</div>`;
-            container.innerHTML = html;
         }
 
-        function filterDictionary() {
-            renderDictionary();
+        function drawPlateBoundaries() {
+            ACCURATE_BOUNDARIES.forEach(boundary => {
+                let strokeColor = '#ef4444'; // Convergent = Red
+                let dashPattern = null;
+
+                if (boundary.type === 'Divergent') {
+                    strokeColor = '#22d3ee'; // Divergent = Cyan
+                } else if (boundary.type === 'Transform') {
+                    strokeColor = '#eab308'; // Transform = Yellow
+                    dashPattern = '5, 5';
+                }
+
+                const polyline = L.polyline(boundary.coords, {
+                    color: strokeColor,
+                    weight: 3.5,
+                    opacity: 0.85,
+                    dashArray: dashPattern
+                });
+
+                polyline.bindTooltip(`Boundary: <strong>${boundary.name}</strong> (${boundary.type})`, { sticky: true });
+                layers.plates.addLayer(polyline);
+            });
         }
 
-        // WORD DECONSTRUCTOR LOGIC
-        function updateDeconstructorTerms() {
-            const std = document.getElementById('deconstructStandardSelect').value;
-            const select = document.getElementById('termSelect');
-            select.innerHTML = '';
+        function fetchEarthquakeData() {
+            const USGS_EQ_URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson";
 
-            const filteredTerms = deconstructorTermsData.filter(item => std === 'all' || item.standard === std);
+            fetch(USGS_EQ_URL)
+                .then(res => res.json())
+                .then(data => {
+                    data.features.forEach(eq => {
+                        const [lng, lat, depth] = eq.geometry.coordinates;
+                        const mag = eq.properties.mag;
+                        const place = eq.properties.place;
+                        const time = new Date(eq.properties.time).toLocaleDateString();
 
-            if (filteredTerms.length === 0) {
-                const opt = document.createElement('option');
-                opt.value = "-1";
-                opt.textContent = "No terms in standard";
-                select.appendChild(opt);
-                return;
+                        const radius = Math.max(3, mag * 1.8);
+
+                        const marker = L.circleMarker([lat, lng], {
+                            radius: radius,
+                            fillColor: '#a855f7',
+                            color: '#e9d5ff',
+                            weight: 1,
+                            opacity: 0.8,
+                            fillOpacity: 0.6,
+                            className: mag >= 6.0 ? 'pulse-marker' : ''
+                        });
+
+                        const popupContent = `
+                            <div class="p-1 text-slate-800">
+                                <div class="flex items-center space-x-1.5 text-purple-700 font-bold text-xs uppercase tracking-wide">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                    <span>Earthquake Epicenter</span>
+                                </div>
+                                <h3 class="font-bold text-sm text-slate-900 mt-0.5">Magnitude ${mag.toFixed(1)}</h3>
+                                <div class="text-xs text-slate-600 mt-1 space-y-0.5">
+                                    <div><strong>Location:</strong> ${place}</div>
+                                    <div><strong>Depth:</strong> ${depth} km</div>
+                                    <div><strong>Date:</strong> ${time}</div>
+                                    <div><strong>Coordinates:</strong> ${lat.toFixed(2)}°, ${lng.toFixed(2)}°</div>
+                                </div>
+                            </div>
+                        `;
+
+                        marker.bindPopup(popupContent);
+                        layers.earthquakes.addLayer(marker);
+                    });
+                })
+                .catch(err => {
+                    console.warn("USGS live earthquake feed unavailable, using sample data.", err);
+                    generateFallbackEarthquakes();
+                });
+        }
+
+        function generateFallbackEarthquakes() {
+            const sampleEqs = [
+                { lat: 36.2, lng: 139.1, mag: 5.8, depth: 35, place: "Honshu, Japan" },
+                { lat: -17.5, lng: -178.2, mag: 6.2, depth: 540, place: "Fiji Region" },
+                { lat: -33.4, lng: -71.6, mag: 5.4, depth: 42, place: "Off Coast of Valparaiso, Chile" },
+                { lat: 61.2, lng: -149.9, mag: 4.9, depth: 20, place: "Southern Alaska" },
+                { lat: 38.2, lng: 15.6, mag: 4.6, depth: 10, place: "Southern Italy" },
+                { lat: -6.2, lng: 105.2, mag: 5.5, depth: 60, place: "Sunda Strait, Indonesia" }
+            ];
+
+            sampleEqs.forEach(eq => {
+                const marker = L.circleMarker([eq.lat, eq.lng], {
+                    radius: eq.mag * 1.8,
+                    fillColor: '#a855f7',
+                    color: '#e9d5ff',
+                    weight: 1,
+                    opacity: 0.8,
+                    fillOpacity: 0.6
+                });
+                marker.bindPopup(`<b>Magnitude ${eq.mag}</b><br>${eq.place}<br>Depth: ${eq.depth} km`);
+                layers.earthquakes.addLayer(marker);
+            });
+        }
+
+        function setPhase(phaseNum) {
+            currentPhase = phaseNum;
+            const config = phaseGuides[phaseNum];
+
+            for (let i = 1; i <= 3; i++) {
+                const btn = document.getElementById(`btn-phase-${i}`);
+                if (i === phaseNum) {
+                    btn.className = "phase-btn flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 text-amber-400 bg-slate-800 shadow-sm border border-slate-600";
+                    btn.querySelector('span:first-child').className = "w-5 h-5 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 text-[10px] font-bold";
+                } else {
+                    btn.className = "phase-btn flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 text-slate-400 hover:text-slate-200";
+                    btn.querySelector('span:first-child').className = "w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 text-[10px] font-bold";
+                }
             }
 
-            filteredTerms.forEach((item, index) => {
-                const opt = document.createElement('option');
-                opt.value = deconstructorTermsData.indexOf(item);
-                opt.textContent = item.term;
-                select.appendChild(opt);
-            });
-        }
+            applyLayerVisibility('volcanoes', config.recommendedLayers.volcanoes);
+            applyLayerVisibility('plates', config.recommendedLayers.plates);
+            applyLayerVisibility('earthquakes', config.recommendedLayers.earthquakes);
 
-        function onDeconstructStandardChange() {
-            updateDeconstructorTerms();
-            loadDeconstruction();
-        }
+            document.getElementById('layer-volcanoes').checked = config.recommendedLayers.volcanoes;
+            document.getElementById('layer-plates').checked = config.recommendedLayers.plates;
+            document.getElementById('layer-earthquakes').checked = config.recommendedLayers.earthquakes;
 
-        function loadDeconstruction() {
-            const selectVal = document.getElementById('termSelect').value;
-            if (selectVal === "-1" || selectVal === "") return;
+            const legendDetail = document.getElementById('boundary-legend-detail');
+            if (config.recommendedLayers.plates) {
+                legendDetail.classList.remove('hidden');
+            } else {
+                legendDetail.classList.add('hidden');
+            }
 
-            const item = deconstructorTermsData[selectVal];
-            const stdObj = standardsList.find(s => s.id === item.standard);
+            document.getElementById('current-phase-badge').innerText = `Phase ${phaseNum}`;
+            document.getElementById('drawer-phase-step').innerText = `Phase ${phaseNum} of 3`;
+            
+            document.getElementById('prev-phase-btn').disabled = (phaseNum === 1);
+            document.getElementById('next-phase-btn').disabled = (phaseNum === 3);
 
-            document.getElementById('deconstructCategory').textContent = stdObj ? stdObj.title : 'Standard Term Breakdown';
-            document.getElementById('deconstructTerm').textContent = item.term;
-            document.getElementById('deconstructMeaning').textContent = item.meaning;
-
-            const container = document.getElementById('deconstructPartsContainer');
-            container.innerHTML = `
-                <div class="p-5 rounded-xl border border-amber-200 bg-amber-50/50 space-y-2">
-                    <span class="text-xs font-bold text-amber-800 uppercase tracking-wider block">1. Prefix (Beginning)</span>
-                    <strong class="text-xl font-bold text-amber-950 block">${item.prefix.text}</strong>
-                    <span class="text-xs text-amber-900 block">${item.prefix.meaning}</span>
+            const cardHtml = `
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">${config.badge}</span>
+                    <span class="text-xs text-slate-400">Step ${phaseNum}</span>
                 </div>
-
-                <div class="p-5 rounded-xl border border-indigo-200 bg-indigo-50/50 space-y-2">
-                    <span class="text-xs font-bold text-indigo-800 uppercase tracking-wider block">2. Root / Combining Form</span>
-                    <strong class="text-xl font-bold text-indigo-950 block">${item.root.text}</strong>
-                    <span class="text-xs text-indigo-900 block">${item.root.meaning}</span>
-                </div>
-
-                <div class="p-5 rounded-xl border border-rose-200 bg-rose-50/50 space-y-2">
-                    <span class="text-xs font-bold text-rose-800 uppercase tracking-wider block">3. Suffix (Ending)</span>
-                    <strong class="text-xl font-bold text-rose-950 block">${item.suffix.text}</strong>
-                    <span class="text-xs text-rose-900 block">${item.suffix.meaning}</span>
+                <h3 class="font-bold text-slate-100 text-base leading-snug">${config.title}</h3>
+                <p class="text-xs text-slate-400 italic">${config.subtitle}</p>
+                
+                <div class="space-y-2 pt-2 border-t border-slate-700/60">
+                    <div class="font-semibold text-xs text-slate-200 uppercase tracking-wider">Inquiry Questions:</div>
+                    <ul class="space-y-2 text-xs text-slate-300 list-disc pl-4 leading-relaxed">
+                        ${config.prompts.map(p => `<li>${p}</li>`).join('')}
+                    </ul>
                 </div>
             `;
+            document.getElementById('inquiry-card').innerHTML = cardHtml;
         }
 
-        // FLASHCARDS LOGIC
-        function initFlashcards() {
-            const filter = document.getElementById('flashcardStandard').value;
-            currentFlashcards = [];
-
-            dictionaryData.forEach(item => {
-                if (filter !== 'all' && item.standard !== filter) return;
-                const stdObj = standardsList.find(s => s.id === item.standard);
-                currentFlashcards.push({ term: item.word, def: item.meaning, cat: stdObj ? stdObj.title.split(':')[0] : item.type.toUpperCase() });
-            });
-
-            currentFlashcards.sort(() => Math.random() - 0.5);
-            currentCardIdx = 0;
-            showCard();
-        }
-
-        function showCard() {
-            if (currentFlashcards.length === 0) {
-                document.getElementById('cardTerm').textContent = "No Cards";
-                document.getElementById('cardDef').textContent = "Select another standard.";
-                document.getElementById('cardCounter').textContent = "0 of 0";
-                return;
-            }
-            const card = currentFlashcards[currentCardIdx];
-            document.getElementById('cardElement').classList.remove('card-flipped');
-            document.getElementById('cardTerm').textContent = card.term;
-            document.getElementById('cardDef').textContent = card.def;
-            document.getElementById('cardCategory').textContent = card.cat;
-            document.getElementById('cardCounter').textContent = `Card ${currentCardIdx + 1} of ${currentFlashcards.length}`;
-        }
-
-        function flipCard() {
-            document.getElementById('cardElement').classList.toggle('card-flipped');
-        }
-
-        function nextCard() {
-            if (currentCardIdx < currentFlashcards.length - 1) {
-                currentCardIdx++;
-                showCard();
-            }
-        }
-
-        function prevCard() {
-            if (currentCardIdx > 0) {
-                currentCardIdx--;
-                showCard();
-            }
-        }
-
-        function markCard(gotIt) {
-            nextCard();
-        }
-
-        // PRACTICE EXAM LOGIC
-        function startExam() {
-            examQuestions = [...examQuestionsData].sort(() => Math.random() - 0.5);
-            currentExamIdx = 0;
-            userExamAnswers = new Array(examQuestions.length).fill(null);
-
-            document.getElementById('examContainer').classList.remove('hidden');
-            document.getElementById('examResults').classList.add('hidden');
-            renderExamQ();
-        }
-
-        function renderExamQ() {
-            const q = examQuestions[currentExamIdx];
-            document.getElementById('examProgress').textContent = `Question ${currentExamIdx + 1} of ${examQuestions.length}`;
-            document.getElementById('examQuestionText').textContent = q.q;
-
-            const container = document.getElementById('examOptionsContainer');
-            container.innerHTML = '';
-
-            q.opts.forEach((opt, idx) => {
-                const isSelected = userExamAnswers[currentExamIdx] === idx;
-                const btn = document.createElement('button');
-                btn.className = `w-full text-left p-4 rounded-xl border text-sm font-semibold transition flex items-center justify-between ${
-                    isSelected ? 'bg-indigo-50 border-indigo-500 text-indigo-900 ring-2 ring-indigo-500/20' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
-                }`;
-                btn.innerHTML = `<span>${String.fromCharCode(65 + idx)}. ${opt}</span> ${isSelected ? '<i class="fa-solid fa-circle-check text-indigo-600"></i>' : ''}`;
-                btn.onclick = () => selectExamOpt(idx);
-                container.appendChild(btn);
-            });
-
-            document.getElementById('btnPrevQ').disabled = currentExamIdx === 0;
-            document.getElementById('btnNextQ').textContent = currentExamIdx === examQuestions.length - 1 ? "Submit Exam" : "Next Question";
-        }
-
-        function selectExamOpt(idx) {
-            userExamAnswers[currentExamIdx] = idx;
-            renderExamQ();
-        }
-
-        function prevExamQ() {
-            if (currentExamIdx > 0) {
-                currentExamIdx--;
-                renderExamQ();
-            }
-        }
-
-        function nextExamQ() {
-            if (currentExamIdx < examQuestions.length - 1) {
-                currentExamIdx++;
-                renderExamQ();
+        function applyLayerVisibility(layerKey, isVisible) {
+            if (isVisible) {
+                if (!map.hasLayer(layers[layerKey])) {
+                    map.addLayer(layers[layerKey]);
+                }
             } else {
-                finishExam();
+                if (map.hasLayer(layers[layerKey])) {
+                    map.removeLayer(layers[layerKey]);
+                }
             }
         }
 
-        function finishExam() {
-            let correct = 0;
-            examQuestions.forEach((q, idx) => {
-                if (userExamAnswers[idx] === q.ans) correct++;
-            });
+        function toggleLayer(layerKey) {
+            const isChecked = document.getElementById(`layer-${layerKey}`).checked;
+            applyLayerVisibility(layerKey, isChecked);
 
-            const scorePct = Math.round((correct / examQuestions.length) * 100);
-            const passed = scorePct >= 72;
+            if (layerKey === 'plates') {
+                const legendDetail = document.getElementById('boundary-legend-detail');
+                if (isChecked) {
+                    legendDetail.classList.remove('hidden');
+                } else {
+                    legendDetail.classList.add('hidden');
+                }
+            }
+        }
 
-            document.getElementById('examContainer').classList.add('hidden');
-            document.getElementById('examResults').classList.remove('hidden');
+        function stepPhase(delta) {
+            const targetPhase = currentPhase + delta;
+            if (targetPhase >= 1 && targetPhase <= 3) {
+                setPhase(targetPhase);
+            }
+        }
 
-            const badge = document.getElementById('badgePassFail');
-            badge.textContent = passed ? "PASS" : "NEEDS REVIEW";
-            badge.className = `inline-block px-4 py-1.5 rounded-full font-bold text-sm ${passed ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`;
+        function toggleDrawer() {
+            const drawer = document.getElementById('inquiry-drawer');
+            drawer.classList.toggle('translate-x-full');
+        }
 
-            document.getElementById('finalScoreText').textContent = `Your Score: ${scorePct}% (${correct}/${examQuestions.length})`;
-            document.getElementById('scoreSubtext').textContent = passed ? "Congratulations! You passed the Medical Terminology Practice Exam." : "Review the dictionary and flashcards, then retake the exam.";
+        const notesTextarea = document.getElementById('student-notes');
+        const saveStatus = document.getElementById('save-status');
+
+        notesTextarea.addEventListener('input', () => {
+            localStorage.setItem('hs_earth_sci_volcano_notes', notesTextarea.value);
+            saveStatus.innerText = "Saving...";
+            setTimeout(() => {
+                saveStatus.innerText = "Auto-saved to session";
+            }, 600);
+        });
+
+        function loadNotes() {
+            const saved = localStorage.getItem('hs_earth_sci_volcano_notes');
+            if (saved) {
+                notesTextarea.value = saved;
+            }
+        }
+
+        function clearNotes() {
+            if (confirm("Are you sure you want to clear your inquiry notes?")) {
+                notesTextarea.value = '';
+                localStorage.removeItem('hs_earth_sci_volcano_notes');
+                saveStatus.innerText = "Notes cleared";
+            }
         }
     </script>
 </body>
