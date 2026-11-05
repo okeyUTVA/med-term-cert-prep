@@ -1,0 +1,2113 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Terminology State Exam Prep | Utah CTE Test #704</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        medical: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                            800: '#0c4a6e',
+                            900: '#0f172a'
+                        },
+                        tealmed: {
+                            500: '#14b8a6',
+                            600: '#0d9488'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="h-full text-slate-800 bg-slate-50 dark:bg-slate-900 dark:text-slate-100 font-sans flex flex-col transition-colors duration-200">
+
+    <!-- Top Announcement / Meta Bar -->
+    <div class="bg-medical-800 text-white text-xs px-4 py-1.5 flex justify-between items-center border-b border-medical-700">
+        <div class="flex items-center space-x-3">
+            <span class="bg-teal-500 text-white font-bold px-2 py-0.5 rounded text-[10px] tracking-wide uppercase">Utah CTE Standard</span>
+            <span>Course Code: 36.01.00.00.175 | Exam #704</span>
+            <span class="hidden md:inline-block border-l border-medical-600 pl-3">Cut Score: 74% (45/60 pts)</span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button id="themeToggleBtn" class="hover:text-teal-300 transition flex items-center gap-1">
+                <i class="fa-solid fa-moon text-xs"></i>
+                <span class="text-xs hidden sm:inline">Dark Mode</span>
+            </button>
+            <a href="#reset" id="resetDataBtn" class="hover:text-red-300 transition text-xs flex items-center gap-1">
+                <i class="fa-solid fa-rotate text-xs"></i> Reset Progress
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="bg-white dark:bg-slate-800 shadow-md border-b border-slate-200 dark:border-slate-700 sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-medical-600 rounded-xl flex items-center justify-center text-white shadow-lg text-2xl font-bold">
+                        🩺
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white leading-tight">
+                            Medical Terminology Certification Prep
+                        </h1>
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                            High School State Skill Certification Exam #704 Practice Center
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Overall Progress Pill -->
+                <div class="flex items-center bg-slate-100 dark:bg-slate-700/60 p-2.5 rounded-xl border border-slate-200 dark:border-slate-600 space-x-4">
+                    <div class="text-right">
+                        <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">Flashcards Mastered</div>
+                        <div class="text-sm font-bold text-medical-600 dark:text-teal-400" id="headerProgressText">0 / 0 (0%)</div>
+                    </div>
+                    <div class="w-24 bg-slate-200 dark:bg-slate-600 rounded-full h-2.5 overflow-hidden">
+                        <div id="headerProgressBar" class="bg-teal-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Navigation Tabs -->
+            <nav class="flex space-x-1 sm:space-x-2 mt-4 overflow-x-auto pb-1 border-t border-slate-100 dark:border-slate-700 pt-3 text-xs sm:text-sm font-medium scrollbar-none" id="mainTabs">
+                <button data-tab="modules" class="tab-btn active px-3.5 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition flex items-center space-x-2 whitespace-nowrap">
+                    <i class="fa-solid fa-book-medical text-medical-500"></i>
+                    <span>1. Strand Review</span>
+                </button>
+                <button data-tab="deconstructor" class="tab-btn px-3.5 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition flex items-center space-x-2 whitespace-nowrap">
+                    <i class="fa-solid fa-puzzle-piece text-purple-500"></i>
+                    <span>2. Word Deconstructor</span>
+                </button>
+                <button data-tab="flashcards" class="tab-btn px-3.5 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition flex items-center space-x-2 whitespace-nowrap">
+                    <i class="fa-solid fa-layer-group text-amber-500"></i>
+                    <span>3. Flashcard Decks</span>
+                </button>
+                <button data-tab="drill" class="tab-btn px-3.5 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition flex items-center space-x-2 whitespace-nowrap">
+                    <i class="fa-solid fa-bolt text-red-500"></i>
+                    <span>4. Abbreviations & Symbols</span>
+                </button>
+                <button data-tab="exam" class="tab-btn px-3.5 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition flex items-center space-x-2 whitespace-nowrap">
+                    <i class="fa-solid fa-clipboard-check text-emerald-500"></i>
+                    <span>5. State Exam Simulator</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- App Main Workspace Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- TAB 1: MODULES BY STRAND -->
+        <section id="tab-modules" class="tab-content block space-y-6">
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                        <span>📚 Utah State Competency Strands (1–15)</span>
+                    </h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                        Review high-yield combining forms, prefixes, suffixes, abbreviations, and clinical terms weighted by exam points.
+                    </p>
+                </div>
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <input type="text" id="strandSearchInput" placeholder="Search medical terms or roots..." class="w-full md:w-64 px-3.5 py-2 text-sm rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-medical-500">
+                </div>
+            </div>
+
+            <!-- Strand Cards Selector Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Sidebar Strand Navigator -->
+                <div class="md:col-span-1 space-y-2 max-h-[700px] overflow-y-auto pr-1" id="strandListContainer">
+                    <!-- Dynamic Strand List Buttons Populated by JS -->
+                </div>
+
+                <!-- Selected Strand Detailed View Pane -->
+                <div class="md:col-span-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-6" id="strandDetailPane">
+                    <!-- Dynamic Content inserted here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: WORD DECONSTRUCTOR TOOL -->
+        <section id="tab-deconstructor" class="tab-content hidden space-y-6">
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div class="max-w-3xl">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/60 px-2.5 py-1 rounded-md">Interactive Word Builder</span>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white mt-2">Medical Term Deconstructor & Synthesizer</h2>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                        Medical terms are composed of prefixes, combining forms/roots, and suffixes. Use the selectors below to build or deconstruct terms according to standard rules.
+                    </p>
+                </div>
+
+                <!-- Word Construction Controls -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                    <!-- Prefix Selector -->
+                    <div class="bg-slate-50 dark:bg-slate-900/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                            1. Select Prefix <span class="text-slate-400 font-normal">(Beginning)</span>
+                        </label>
+                        <select id="builderPrefixSelect" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm focus:ring-2 focus:ring-purple-500">
+                            <option value="">[ None / Optional ]</option>
+                        </select>
+                        <div id="prefixDefHint" class="mt-2 text-xs text-slate-500 dark:text-slate-400 italic">Select prefix...</div>
+                    </div>
+
+                    <!-- Root Selector -->
+                    <div class="bg-slate-50 dark:bg-slate-900/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                            2. Root / Combining Form <span class="text-slate-400 font-normal">(Core)</span>
+                        </label>
+                        <select id="builderRootSelect" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm focus:ring-2 focus:ring-purple-500">
+                            <option value="">-- Choose Word Root --</option>
+                        </select>
+                        <div id="rootDefHint" class="mt-2 text-xs text-slate-500 dark:text-slate-400 italic">Select root...</div>
+                    </div>
+
+                    <!-- Suffix Selector -->
+                    <div class="bg-slate-50 dark:bg-slate-900/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                            3. Select Suffix <span class="text-slate-400 font-normal">(End)</span>
+                        </label>
+                        <select id="builderSuffixSelect" class="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm focus:ring-2 focus:ring-purple-500">
+                            <option value="">-- Choose Suffix --</option>
+                        </select>
+                        <div id="suffixDefHint" class="mt-2 text-xs text-slate-500 dark:text-slate-400 italic">Select suffix...</div>
+                    </div>
+                </div>
+
+                <!-- Combined Live Result Card -->
+                <div class="mt-8 bg-gradient-to-r from-purple-900 to-indigo-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 text-purple-800/30 text-9xl font-bold select-none">🔬</div>
+                    
+                    <div class="relative z-10">
+                        <div class="text-xs uppercase tracking-widest text-purple-300 font-semibold mb-1">Constructed Term Result</div>
+                        <div id="constructedTermDisplay" class="text-3xl sm:text-4xl font-extrabold tracking-wide text-amber-300">
+                            -- Select Components Above --
+                        </div>
+
+                        <!-- Breakdown Pills -->
+                        <div class="flex flex-wrap items-center gap-2 mt-4 text-xs font-mono" id="componentPillsContainer">
+                            <!-- Pills populated by JS -->
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-purple-700/60">
+                            <h4 class="text-xs font-bold uppercase text-purple-200">Literal Translation / Medical Definition:</h4>
+                            <p id="constructedDefinitionDisplay" class="text-lg font-medium text-purple-100 mt-1">
+                                Combine parts above to view synthesized definition.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preset Deconstruction Challenges -->
+                <div class="mt-8">
+                    <h3 class="text-md font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-purple-500"></i> Practice Preset Deconstruction Challenges
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2" id="presetChallengesContainer">
+                        <!-- Loaded via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: FLASHCARD DECKS -->
+        <section id="tab-flashcards" class="tab-content hidden space-y-6">
+            <!-- Controls & Filters -->
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
+                <div class="flex flex-wrap items-center gap-3">
+                    <select id="flashcardStrandFilter" class="px-3.5 py-2 text-sm rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 font-medium">
+                        <option value="all">All Strands (All Decks)</option>
+                        <!-- Dynamic Options populated by JS -->
+                    </select>
+
+                    <select id="flashcardTypeFilter" class="px-3.5 py-2 text-sm rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 font-medium">
+                        <option value="all">All Category Types</option>
+                        <option value="terms">Clinical Terms & Pathologies</option>
+                        <option value="prefixes">Prefixes</option>
+                        <option value="suffixes">Suffixes</option>
+                        <option value="roots">Roots / Combining Forms</option>
+                        <option value="abbreviations">Abbreviations</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center justify-between md:justify-end gap-3 text-sm">
+                    <span id="cardCountIndicator" class="text-slate-500 dark:text-slate-400 font-medium">Card 1 of 0</span>
+                    <button id="shuffleCardsBtn" class="px-3 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-shuffle text-amber-500"></i> Shuffle Deck
+                    </button>
+                </div>
+            </div>
+
+            <!-- Single Flashcard Display Container -->
+            <div class="max-w-2xl mx-auto">
+                <div id="flashcardElement" class="flip-card w-full h-80 cursor-pointer">
+                    <div class="flip-card-inner relative w-full h-full rounded-3xl shadow-xl transition-all duration-500">
+                        
+                        <!-- Card Front -->
+                        <div class="flip-card-front absolute w-full h-full bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-3xl p-8 flex flex-col justify-between items-center text-center">
+                            <div class="w-full flex justify-between items-center text-xs text-slate-400 font-mono">
+                                <span id="cardCategoryTag" class="px-2.5 py-1 bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 font-bold rounded-lg uppercase">CATEGORY</span>
+                                <span>Click card to flip 🔄</span>
+                            </div>
+
+                            <div class="my-auto">
+                                <h3 id="cardFrontText" class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                                    Term Loading...
+                                </h3>
+                                <p id="cardFrontSubtext" class="text-xs text-slate-400 mt-2 font-mono">
+                                    Click card or press Spacebar
+                                </p>
+                            </div>
+
+                            <div class="text-xs text-slate-400">
+                                Utah CTE Exam #704 Alignment
+                            </div>
+                        </div>
+
+                        <!-- Card Back -->
+                        <div class="flip-card-back absolute w-full h-full bg-slate-900 text-white border-2 border-medical-500 rounded-3xl p-8 flex flex-col justify-between items-center text-center">
+                            <div class="w-full flex justify-between items-center text-xs text-teal-300 font-mono">
+                                <span>DEFINITION / BREAKDOWN</span>
+                                <span>Click card to flip 🔄</span>
+                            </div>
+
+                            <div class="my-auto space-y-3">
+                                <div id="cardBackBreakdown" class="text-sm font-mono text-teal-300">
+                                    <!-- Root/Prefix breakdown -->
+                                </div>
+                                <h4 id="cardBackDefinition" class="text-xl sm:text-2xl font-bold text-amber-300">
+                                    Definition appears here...
+                                </h4>
+                            </div>
+
+                            <div id="cardBackStrand" class="text-xs text-slate-400">
+                                Strand Reference
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Deck Action Buttons -->
+                <div class="mt-6 flex items-center justify-between gap-4">
+                    <button id="prevCardBtn" class="px-5 py-3 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-2xl text-slate-700 dark:text-slate-200 font-bold transition flex items-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-arrow-left"></i> Previous
+                    </button>
+
+                    <div class="flex items-center space-x-2">
+                        <button id="markNeedsReviewBtn" class="px-4 py-3 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-900/60 rounded-2xl text-xs sm:text-sm font-bold transition flex items-center gap-1.5 border border-rose-200 dark:border-rose-800">
+                            <i class="fa-solid fa-xmark"></i> Needs Practice
+                        </button>
+                        <button id="markMasteredBtn" class="px-4 py-3 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 rounded-2xl text-xs sm:text-sm font-bold transition flex items-center gap-1.5 border border-emerald-200 dark:border-emerald-800">
+                            <i class="fa-solid fa-check"></i> Got It!
+                        </button>
+                    </div>
+
+                    <button id="nextCardBtn" class="px-5 py-3 bg-medical-600 hover:bg-medical-700 text-white rounded-2xl font-bold transition flex items-center gap-2 shadow-md">
+                        Next <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: ABBREVIATIONS & SYMBOLS DRILL -->
+        <section id="tab-drill" class="tab-content hidden space-y-6">
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 dark:border-slate-700 pb-5">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/60 px-2.5 py-1 rounded-md">Speed Practice Game</span>
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mt-2">Clinical Symbols & Abbreviations Speed Drill</h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                            Master high-frequency clinical shorthand (Strand 1 Standard 5 & 6) and system abbreviations.
+                        </p>
+                    </div>
+
+                    <!-- Score Counter -->
+                    <div class="flex items-center gap-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <div class="text-center">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">Streak</div>
+                            <div id="drillStreak" class="text-lg font-bold text-amber-500">0 🔥</div>
+                        </div>
+                        <div class="h-8 w-px bg-slate-200 dark:bg-slate-700"></div>
+                        <div class="text-center">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">Score</div>
+                            <div id="drillScore" class="text-lg font-bold text-emerald-500">0 / 0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Active Stage -->
+                <div class="max-w-xl mx-auto mt-8 text-center space-y-6">
+                    <div class="bg-slate-900 text-white p-10 rounded-3xl shadow-xl relative overflow-hidden border border-slate-700">
+                        <div class="text-xs text-teal-400 uppercase tracking-widest font-mono mb-2">Identify the Meaning</div>
+                        <div id="drillPrompt" class="text-5xl font-extrabold text-amber-300 font-mono tracking-wider py-4">
+                            --
+                        </div>
+                        <div id="drillCategoryTag" class="text-xs text-slate-400 font-mono">
+                            Category: Standard Symbols
+                        </div>
+                    </div>
+
+                    <!-- Multiple Choice Options -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="drillOptionsContainer">
+                        <!-- Loaded dynamically via JS -->
+                    </div>
+
+                    <!-- Feedback Banner -->
+                    <div id="drillFeedback" class="hidden p-4 rounded-xl text-sm font-bold"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: STATE EXAM SIMULATOR -->
+        <section id="tab-exam" class="tab-content hidden space-y-6">
+            <!-- Exam Intro Screen -->
+            <div id="examIntroCard" class="bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-md max-w-3xl mx-auto text-center space-y-6">
+                <div class="w-16 h-16 bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-sm">
+                    📋
+                </div>
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+                        Utah State Skill Certification Practice Exam #704
+                    </h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm mt-2 max-w-xl mx-auto">
+                        Simulates the exact 60-question state exam test specification blueprint across all 15 course strands. Passing cut score is <span class="font-bold text-emerald-600 dark:text-emerald-400">74% (45/60 correct)</span>.
+                    </p>
+                </div>
+
+                <!-- Blueprint Distribution Chart Info -->
+                <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl text-left border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-400 space-y-2">
+                    <div class="font-bold text-slate-900 dark:text-white uppercase tracking-wider text-[11px] mb-1">State Blueprint Weighting Covered:</div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono">
+                        <div>• Strand 1 (Rules/Abbr): 12 q's</div>
+                        <div>• Strand 10 (Cardio): 9 q's</div>
+                        <div>• Strand 3 (Movements): 5 q's</div>
+                        <div>• Strand 2 (Planes): 4 q's</div>
+                        <div>• Strand 8 (Special Senses): 4 q's</div>
+                        <div>• Strand 12 (Resp): 4 q's</div>
+                        <div>• Strand 13 (Digestive): 4 q's</div>
+                        <div>• Strand 14 (Urinary): 4 q's</div>
+                        <div>• Strand 15 (Repro): 4 q's</div>
+                        <div>• Strands 4, 5, 6, 7, 9, 11: 3 q's ea.</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+                    <button id="startFullExamBtn" class="w-full sm:w-auto px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-base shadow-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-play"></i> Start 60-Question State Exam
+                    </button>
+                    <button id="startQuickQuizBtn" class="w-full sm:w-auto px-6 py-4 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-2xl font-bold text-sm transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-bolt text-amber-500"></i> Start 15-Question Quick Quiz
+                    </button>
+                </div>
+            </div>
+
+            <!-- Exam Live Active Stage -->
+            <div id="examActiveStage" class="hidden space-y-6">
+                <!-- Exam Top Status Header -->
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-wrap justify-between items-center gap-4">
+                    <div class="flex items-center space-x-3">
+                        <span id="examQuestionCounter" class="bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 font-bold px-3 py-1 rounded-lg text-xs font-mono">
+                            Question 1 of 60
+                        </span>
+                        <span id="examStrandBadge" class="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            Strand 1: Word Building
+                        </span>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <div class="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                            Time Elapsed: <span id="examTimer" class="font-bold text-slate-800 dark:text-slate-200">00:00</span>
+                        </div>
+                        <button id="quitExamBtn" class="text-xs text-rose-500 hover:text-rose-700 font-bold">
+                            End Test Early
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question Card -->
+                <div class="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-md space-y-6">
+                    <h3 id="examQuestionText" class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white leading-relaxed">
+                        Question text goes here...
+                    </h3>
+
+                    <!-- Choice Options List -->
+                    <div id="examOptionsList" class="space-y-3">
+                        <!-- Loaded via JS -->
+                    </div>
+
+                    <!-- Instant Rationale Display (Revealed after selection) -->
+                    <div id="examRationaleBox" class="hidden p-4 rounded-2xl border text-sm space-y-1">
+                        <div id="rationaleHeader" class="font-bold flex items-center gap-2"></div>
+                        <p id="rationaleText" class="text-slate-600 dark:text-slate-300"></p>
+                    </div>
+
+                    <!-- Exam Navigation Row -->
+                    <div class="flex justify-between items-center pt-4 border-t border-slate-100 dark:border-slate-700">
+                        <button id="prevExamQBtn" class="px-4 py-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition">
+                            <i class="fa-solid fa-chevron-left"></i> Previous
+                        </button>
+
+                        <button id="nextExamQBtn" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold transition shadow-md">
+                            Next Question <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exam Results Report Card -->
+            <div id="examResultsCard" class="hidden bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-lg space-y-8 max-w-4xl mx-auto">
+                <div class="text-center space-y-3">
+                    <div id="resultBadgeIcon" class="w-20 h-20 rounded-full flex items-center justify-center text-4xl mx-auto">
+                        🏆
+                    </div>
+                    <h2 id="resultTitleText" class="text-3xl font-extrabold text-slate-900 dark:text-white">
+                        Exam Complete!
+                    </h2>
+                    <p id="resultSubtitleText" class="text-slate-500 dark:text-slate-400 text-sm">
+                        Here is your performance report based on Utah CTE Cut Score (74%).
+                    </p>
+                </div>
+
+                <!-- Final Score Pill Matrix -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    <div class="bg-slate-50 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
+                        <div class="text-xs text-slate-400 font-bold uppercase">Final Score</div>
+                        <div id="finalScorePercent" class="text-4xl font-extrabold text-emerald-500 mt-1">0%</div>
+                        <div id="finalScoreFraction" class="text-xs text-slate-500 mt-1">0 of 60 Correct</div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
+                        <div class="text-xs text-slate-400 font-bold uppercase">State Exam Status</div>
+                        <div id="finalPassFailStatus" class="text-2xl font-bold mt-2">PASSED</div>
+                        <div class="text-[11px] text-slate-400 mt-1">Target: 74% Cut Score</div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700">
+                        <div class="text-xs text-slate-400 font-bold uppercase">Time Taken</div>
+                        <div id="finalTimeTaken" class="text-2xl font-bold text-slate-800 dark:text-slate-200 mt-2">00:00</div>
+                        <div class="text-[11px] text-slate-400 mt-1">Self-Paced Practice</div>
+                    </div>
+                </div>
+
+                <!-- Strand Breakdown Table -->
+                <div>
+                    <h3 class="text-md font-bold text-slate-900 dark:text-white mb-3">
+                        Performance Breakdown by State Strand
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-100 dark:bg-slate-700/60 uppercase font-bold text-slate-600 dark:text-slate-300">
+                                <tr>
+                                    <th class="p-3 rounded-l-xl">Strand Competency</th>
+                                    <th class="p-3 text-center">Score</th>
+                                    <th class="p-3 text-center">Percentage</th>
+                                    <th class="p-3 rounded-r-xl text-center">Mastery Level</th>
+                                </tr>
+                            </thead>
+                            <tbody id="strandResultsTableBody" class="divide-y divide-slate-100 dark:divide-slate-700 font-medium">
+                                <!-- Loaded dynamically via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Action Retake Buttons -->
+                <div class="flex justify-center gap-4 pt-4">
+                    <button id="retakeExamBtn" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-sm shadow-md transition">
+                        <i class="fa-solid fa-rotate"></i> Retake Practice Exam
+                    </button>
+                    <button id="backToModulesBtn" class="px-6 py-3 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 rounded-2xl font-bold text-sm transition">
+                        Review Weak Modules
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 mt-12 text-xs text-center text-slate-500 dark:text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p><strong>Utah High School Medical Terminology Skill Certification Prep</strong> (Test #704 Standards Alignment).</p>
+            <p class="text-slate-400 dark:text-slate-500">Independent review tool built for student self-assessment. Ungraded • Interactive • Self-Paced.</p>
+        </div>
+    </footer>
+
+    <!-- JS Application Code & Standards Dataset -->
+    <script>
+        /**
+         * COMPREHENSIVE DATASET FOR UTAH MEDICAL TERMINOLOGY (TEST #704)
+         */
+        const APP_DATA = {
+            examInfo: {
+                title: "Utah CTE Medical Terminology",
+                code: "36.01.00.00.175",
+                testNumber: 704,
+                cutScorePercent: 74,
+                totalQuestions: 60
+            },
+            strands: [
+                {
+                    id: 1,
+                    title: "Strand 1: Building Rules, Roots, Prefixes, Suffixes & Abbreviations",
+                    weight: 12,
+                    description: "Understand rules for combining roots, combining vowels (o), prefixes, suffixes, abbreviations, and symbols.",
+                    rules: [
+                        "Word Root: Core meaning (Greek/Latin origin).",
+                        "Combining Form: Root + vowel (usually 'o') used when connecting to a suffix starting with a consonant or connecting root to root.",
+                        "No Combining Vowel Needed: If the suffix begins with a vowel (e.g., gastr/o + -itis = gastritis).",
+                        "Compound Words: Keep combining vowel between two roots even if second root starts with a vowel (e.g., gastr/o + enter/o + -logy)."
+                    ],
+                    prefixes: [
+                        { term: "a-, an-", def: "without, absence of" },
+                        { term: "ab-", def: "away from" },
+                        { term: "ad-, af-", def: "toward, to" },
+                        { term: "ambi-", def: "both" },
+                        { term: "ante-", def: "before" },
+                        { term: "anti-", def: "against" },
+                        { term: "bi-", def: "two, double" },
+                        { term: "brady-", def: "slow" },
+                        { term: "circum-", def: "around" },
+                        { term: "dys-", def: "painful, bad, difficult" },
+                        { term: "endo-", def: "inside, within" },
+                        { term: "epi-", def: "on, upon" },
+                        { term: "eu-", def: "good, normal" },
+                        { term: "hyper-", def: "excessive, above normal" },
+                        { term: "hypo-", def: "under, below, deficient" },
+                        { term: "inter-", def: "between" },
+                        { term: "intra-", def: "within, inside" },
+                        { term: "macro-", def: "large" },
+                        { term: "micro-", def: "small" },
+                        { term: "peri-", def: "around" },
+                        { term: "poly-", def: "many, much" },
+                        { term: "post-", def: "after, behind" },
+                        { term: "pre-", def: "before, in front of" },
+                        { term: "sub-", def: "under, below" },
+                        { term: "tachy-", def: "swift, fast" }
+                    ],
+                    roots: [
+                        { term: "abdomin/o", def: "abdomen" },
+                        { term: "acr/o", def: "extremity" },
+                        { term: "alb-", def: "white" },
+                        { term: "aut/o", def: "self" },
+                        { term: "bi/o", def: "life" },
+                        { term: "cyan/o", def: "blue" },
+                        { term: "cyt/o", def: "cell" },
+                        { term: "erythr/o", def: "red" },
+                        { term: "gastr/o", def: "stomach" },
+                        { term: "glyc/o, gluc/o", def: "sugar, sweet" },
+                        { term: "leuk/o", def: "white" },
+                        { term: "melan/o", def: "black" },
+                        { term: "path/o", def: "disease" },
+                        { term: "py/o", def: "pus" },
+                        { term: "pyr/o", def: "fever, fire" },
+                        { term: "therm/o", def: "heat" }
+                    ],
+                    suffixes: [
+                        { term: "-algia, -dynia", def: "pain" },
+                        { term: "-cide", def: "kill" },
+                        { term: "-cyte", def: "cell" },
+                        { term: "-ectomy", def: "surgical removal, excision" },
+                        { term: "-emia", def: "blood condition" },
+                        { term: "-gram", def: "record, picture" },
+                        { term: "-graphy", def: "process of recording" },
+                        { term: "-itis", def: "inflammation" },
+                        { term: "-logist", def: "one who studies / specialist" },
+                        { term: "-logy", def: "study of" },
+                        { term: "-lysis", def: "breakdown, destruction" },
+                        { term: "-megaly", def: "enlargement" },
+                        { term: "-oma", def: "tumor, mass" },
+                        { term: "-osis", def: "abnormal condition" },
+                        { term: "-pathy", def: "disease" },
+                        { term: "-plasty", def: "surgical repair" },
+                        { term: "-rrhage, -rrhagia", def: "bursting forth, heavy flow" },
+                        { term: "-rrhea", def: "discharge, flow" },
+                        { term: "-scope", def: "instrument to view" },
+                        { term: "-scopy", def: "visual examination" },
+                        { term: "-stomy", def: "creation of a new opening" },
+                        { term: "-tomy", def: "incision, cutting into" }
+                    ],
+                    abbreviations: [
+                        { abbr: "ac", def: "before meals" },
+                        { abbr: "bid", def: "twice a day" },
+                        { abbr: "tid", def: "three times a day" },
+                        { abbr: "qid", def: "four times a day" },
+                        { abbr: "prn", def: "as needed" },
+                        { abbr: "NPO", def: "nothing by mouth" },
+                        { abbr: "SOAP", def: "Subjective, Objective, Assessment, Plan" },
+                        { abbr: "stat", def: "immediately" },
+                        { abbr: "Tx", def: "treatment" },
+                        { abbr: "Dx", def: "diagnosis" },
+                        { abbr: "Hx", def: "history" }
+                    ],
+                    symbols: [
+                        { symbol: "c (with line)", def: "with" },
+                        { symbol: "s (with line)", def: "without" },
+                        { symbol: "Δ", def: "change" },
+                        { symbol: "↑", def: "increase" },
+                        { symbol: "↓", def: "decrease" },
+                        { symbol: ">", def: "greater than" },
+                        { symbol: "<", def: "less than" }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: "Strand 2: Anatomical Terms & Body Planes",
+                    weight: 4,
+                    description: "Anatomical position reference points, regions, and body planes.",
+                    terms: [
+                        { term: "Sagittal Plane", def: "Lengthwise plane dividing body into right and left parts" },
+                        { term: "Midsagittal Plane", def: "Equal right and left halves" },
+                        { term: "Frontal (Coronal) Plane", def: "Divides body into anterior (front) and posterior (back) sections" },
+                        { term: "Transverse (Horizontal) Plane", def: "Divides body into upper (superior) and lower (inferior) portions" },
+                        { term: "Cephalic", def: "Pertaining to the head" },
+                        { term: "Cervical", def: "Pertaining to the neck" },
+                        { term: "Brachial", def: "Arm" },
+                        { term: "Carpal", def: "Wrist" },
+                        { term: "Axillary", def: "Armpit" },
+                        { term: "Gluteal", def: "Buttocks" },
+                        { term: "Plantars", def: "Sole of foot" }
+                    ]
+                },
+                {
+                    id: 3,
+                    title: "Strand 3: Movement & Directional Terms",
+                    weight: 5,
+                    description: "Directional orientation and body movement terms.",
+                    terms: [
+                        { term: "Superior", def: "Toward the head or upper body" },
+                        { term: "Inferior", def: "Toward the feet or lower body" },
+                        { term: "Anterior (Ventral)", def: "Toward the front" },
+                        { term: "Posterior (Dorsal)", def: "Toward the back" },
+                        { term: "Medial", def: "Toward the midline of the body" },
+                        { term: "Lateral", def: "Away from the midline / to the side" },
+                        { term: "Proximal", def: "Closer to point of attachment" },
+                        { term: "Distal", def: "Farther from point of attachment" },
+                        { term: "Abduction", def: "Moving away from midline" },
+                        { term: "Adduction", def: "Moving toward midline" },
+                        { term: "Flexion", def: "Bending joint / decreasing angle" },
+                        { term: "Extension", def: "Straightening joint / increasing angle" },
+                        { term: "Pronation", def: "Palm down" },
+                        { term: "Supination", def: "Palm up" },
+                        { term: "Supine", def: "Lying face up" },
+                        { term: "Prone", def: "Lying face down" }
+                    ]
+                },
+                {
+                    id: 4,
+                    title: "Strand 4: Integumentary System",
+                    weight: 3,
+                    description: "Skin, hair, nails, and related disorders.",
+                    terms: [
+                        { term: "dermat/o, derm/o", def: "skin" },
+                        { term: "adip/o, lip/o", def: "fat" },
+                        { term: "cyanoderma", def: "blue skin condition" },
+                        { term: "erythroderma", def: "red skin condition" },
+                        { term: "melanoma", def: "black tumor of the skin" },
+                        { term: "xeroderma", def: "dry skin" },
+                        { term: "subcutaneous (subq)", def: "under the skin" },
+                        { term: "onychophagia", def: "nail biting" }
+                    ]
+                },
+                {
+                    id: 5,
+                    title: "Strand 5: Skeletal System",
+                    weight: 3,
+                    description: "Bones, cartilage, joints, and fractures.",
+                    terms: [
+                        { term: "oste/o", def: "bone" },
+                        { term: "arthr/o", def: "joint" },
+                        { term: "chondr/o", def: "cartilage" },
+                        { term: "myel/o", def: "bone marrow / spinal cord" },
+                        { term: "osteoblast", def: "bone building cell" },
+                        { term: "osteoclast", def: "bone destroying cell" },
+                        { term: "osteoarthritis (OA)", def: "degenerative joint disease" },
+                        { term: "kyphosis", def: "humpback curvature of spine" },
+                        { term: "lordosis", def: "swayback curvature of lumbar spine" },
+                        { term: "scoliosis", def: "lateral curvature of spine" },
+                        { term: "arthroplasty", def: "surgical repair of a joint" }
+                    ]
+                },
+                {
+                    id: 6,
+                    title: "Strand 6: Muscular System",
+                    weight: 3,
+                    description: "Muscles, tendons, fascia, and movement.",
+                    terms: [
+                        { term: "my/o", def: "muscle" },
+                        { term: "ten/o, tendin/o", def: "tendon" },
+                        { term: "fasci/o", def: "fascia (fibrous band)" },
+                        { term: "atrophy", def: "decrease in muscle size/mass" },
+                        { term: "bradykinesia", def: "slow movement" },
+                        { term: "myalgia", def: "muscle pain" },
+                        { term: "myasthenia", def: "muscle weakness" },
+                        { term: "fibromyalgia", def: "pain in muscle fibers" },
+                        { term: "EMG", def: "electromyogram" }
+                    ]
+                },
+                {
+                    id: 7,
+                    title: "Strand 7: Nervous System",
+                    weight: 3,
+                    description: "Brain, nerves, spinal cord, and sensory neurons.",
+                    terms: [
+                        { term: "encephal/o", def: "brain" },
+                        { term: "neur/o", def: "nerve" },
+                        { term: "cerebr/o", def: "cerebrum (large outer brain)" },
+                        { term: "mening/o", def: "meninges (brain coverings)" },
+                        { term: "aphasia", def: "without speech" },
+                        { term: "dysphasia", def: "difficulty speaking" },
+                        { term: "encephalitis", def: "inflammation of brain" },
+                        { term: "meningitis", def: "inflammation of meninges" },
+                        { term: "hemiplegia", def: "paralysis of half the body" },
+                        { term: "quadriplegia", def: "paralysis of all 4 limbs" },
+                        { term: "EEG", def: "electroencephalogram" },
+                        { term: "CVA", def: "cerebrovascular accident (stroke)" }
+                    ]
+                },
+                {
+                    id: 8,
+                    title: "Strand 8: Special Senses (Eyes & Ears)",
+                    weight: 4,
+                    description: "Vision, hearing, structures, and pathologies.",
+                    terms: [
+                        { term: "ophthalm/o, ocul/o", def: "eye" },
+                        { term: "ot/o", def: "ear" },
+                        { term: "tympan/o, myring/o", def: "eardrum / tympanic membrane" },
+                        { term: "blephar/o", def: "eyelid" },
+                        { term: "diplopia", def: "double vision" },
+                        { term: "presbycusis", def: "hearing loss due to old age" },
+                        { term: "presbyopia", def: "impaired vision due to old age" },
+                        { term: "otitis media (OM)", def: "middle ear infection" },
+                        { term: "cataract", def: "clouding of lens of eye" },
+                        { term: "myopia", def: "nearsightedness" },
+                        { term: "hyperopia", def: "farsightedness" }
+                    ]
+                },
+                {
+                    id: 9,
+                    title: "Strand 9: Endocrine System",
+                    weight: 3,
+                    description: "Glands, hormones, metabolic disorders.",
+                    terms: [
+                        { term: "aden/o", def: "gland" },
+                        { term: "thyr/o", def: "thyroid gland" },
+                        { term: "adren/o", def: "adrenal gland" },
+                        { term: "glyc/o", def: "sugar" },
+                        { term: "hyperglycemia", def: "high blood sugar" },
+                        { term: "hypoglycemia", def: "low blood sugar" },
+                        { term: "polyuria", def: "excessive urination" },
+                        { term: "polydipsia", def: "excessive thirst" },
+                        { term: "polyphagia", def: "excessive hunger" },
+                        { term: "DM", def: "diabetes mellitus" },
+                        { term: "FBS", def: "fasting blood sugar" }
+                    ]
+                },
+                {
+                    id: 10,
+                    title: "Strand 10: Cardiovascular System",
+                    weight: 9,
+                    description: "Heart, blood vessels, circulation, and blood components.",
+                    terms: [
+                        { term: "cardi/o", def: "heart" },
+                        { term: "angi/o, vas/o", def: "vessel" },
+                        { term: "arteri/o", def: "artery" },
+                        { term: "phleb/o, ven/o", def: "vein" },
+                        { term: "ather/o", def: "fatty plaque" },
+                        { term: "hem/o, hemat/o", def: "blood" },
+                        { term: "erythrocyte", def: "red blood cell" },
+                        { term: "leukocyte", def: "white blood cell" },
+                        { term: "thrombocyte", def: "clotting cell (platelet)" },
+                        { term: "bradycardia", def: "slow heart rate (< 60 bpm)" },
+                        { term: "tachycardia", def: "fast heart rate (> 100 bpm)" },
+                        { term: "atherosclerosis", def: "hardening of arteries due to plaque" },
+                        { term: "myocardial infarction (MI)", def: "heart attack" },
+                        { term: "hypertension (HTN)", def: "high blood pressure" },
+                        { term: "ECG / EKG", def: "electrocardiogram" }
+                    ]
+                },
+                {
+                    id: 11,
+                    title: "Strand 11: Lymphatic & Immune System",
+                    weight: 2,
+                    description: "Lymph nodes, spleen, immunity, and pathogens.",
+                    terms: [
+                        { term: "lymph/o", def: "lymph, lymphatic fluid" },
+                        { term: "splen/o", def: "spleen" },
+                        { term: "thym/o", def: "thymus gland" },
+                        { term: "immun/o", def: "protected / immunity" },
+                        { term: "lymphedema", def: "swelling of lymph tissue" },
+                        { term: "macrophage", def: "large phagocytic eating cell" },
+                        { term: "lymphadenitis", def: "inflammation of lymph nodes" },
+                        { term: "lymphoma", def: "tumor of lymphatic system" }
+                    ]
+                },
+                {
+                    id: 12,
+                    title: "Strand 12: Respiratory System",
+                    weight: 4,
+                    description: "Airways, lungs, gas exchange, and breathing conditions.",
+                    terms: [
+                        { term: "pneum/o, pulmon/o", def: "lung, air" },
+                        { term: "bronch/o", def: "bronchus" },
+                        { term: "laryng/o", def: "larynx (voice box)" },
+                        { term: "pharyng/o", def: "pharynx (throat)" },
+                        { term: "rhin/o, nas/o", def: "nose" },
+                        { term: "apnea", def: "absence of breathing" },
+                        { term: "dyspnea", def: "difficulty breathing" },
+                        { term: "eupnea", def: "normal breathing" },
+                        { term: "tachypnea", def: "rapid breathing" },
+                        { term: "rhinorrhea", def: "runny nose" },
+                        { term: "SOB", def: "shortness of breath" },
+                        { term: "COPD", def: "chronic obstructive pulmonary disease" }
+                    ]
+                },
+                {
+                    id: 13,
+                    title: "Strand 13: Digestive System",
+                    weight: 4,
+                    description: "Gastrointestinal tract, liver, gallbladder, and digestion.",
+                    terms: [
+                        { term: "gastr/o", def: "stomach" },
+                        { term: "enter/o", def: "small intestine" },
+                        { term: "col/o", def: "colon / large intestine" },
+                        { term: "hepat/o", def: "liver" },
+                        { term: "cholecyst/o", def: "gallbladder" },
+                        { term: "cholelithiasis", def: "condition of gallstones" },
+                        { term: "dyspepsia", def: "difficult digestion" },
+                        { term: "dysphagia", def: "difficulty swallowing" },
+                        { term: "gastroenteritis", def: "inflammation of stomach and intestines" },
+                        { term: "colostomy", def: "new opening in colon" },
+                        { term: "GERD", def: "gastroesophageal reflux disease" }
+                    ]
+                },
+                {
+                    id: 14,
+                    title: "Strand 14: Urinary System",
+                    weight: 4,
+                    description: "Kidneys, ureters, bladder, urethra, and filtration.",
+                    terms: [
+                        { term: "nephr/o, ren/o", def: "kidney" },
+                        { term: "cyst/o", def: "urinary bladder" },
+                        { term: "pyel/o", def: "renal pelvis" },
+                        { term: "ur/o, urin/o", def: "urine" },
+                        { term: "anuria", def: "no urine production" },
+                        { term: "dysuria", def: "painful urination" },
+                        { term: "hematuria", def: "blood in urine" },
+                        { term: "nocturia", def: "nighttime urination" },
+                        { term: "oliguria", def: "scanty urine" },
+                        { term: "nephrolithiasis", def: "kidney stones" },
+                        { term: "UTI", def: "urinary tract infection" }
+                    ]
+                },
+                {
+                    id: 15,
+                    title: "Strand 15: Reproductive System",
+                    weight: 4,
+                    description: "Male and female reproductive organs and obstetrics.",
+                    terms: [
+                        { term: "hyster/o, metr/o, uter/o", def: "uterus" },
+                        { term: "oophor/o, ovari/o", def: "ovary" },
+                        { term: "salping/o", def: "fallopian tube" },
+                        { term: "orchi/o, orchid/o", def: "testis, testicle" },
+                        { term: "prostat/o", def: "prostate gland" },
+                        { term: "amenorrhea", def: "absence of menstrual flow" },
+                        { term: "dysmenorrhea", def: "painful menstrual flow" },
+                        { term: "hysterectomy", def: "surgical removal of uterus" },
+                        { term: "cryptorchidism", def: "undescended testicles" },
+                        { term: "gravida", def: "pregnant woman / number of pregnancies" },
+                        { term: "LMP", def: "last menstrual period" }
+                    ]
+                }
+            ],
+
+            // 60-Question State Exam Question Bank
+            questionBank: [
+                {
+                    id: 1,
+                    strand: 1,
+                    question: "According to standard medical term rules, what is used to link a word root to a suffix that begins with a consonant?",
+                    options: [
+                        "A prefix",
+                        "A combining vowel (usually 'o')",
+                        "An apostrophe",
+                        "No linking element is needed"
+                    ],
+                    correct: 1,
+                    explanation: "A combining vowel (usually 'o') is added to a root when connecting to a suffix that begins with a consonant (e.g., cardi/o + logy)."
+                },
+                {
+                    id: 2,
+                    strand: 1,
+                    question: "Which suffix means 'surgical removal or excision'?",
+                    options: ["-otomy", "-ostomy", "-ectomy", "-plasty"],
+                    correct: 2,
+                    explanation: "-ectomy means surgical excision or removal (e.g., appendectomy)."
+                },
+                {
+                    id: 3,
+                    strand: 1,
+                    question: "What does the clinical abbreviation 'NPO' stand for?",
+                    options: ["No prescription ordered", "Nothing by mouth", "New patient orientation", "Nighttime pulse observation"],
+                    correct: 1,
+                    explanation: "NPO comes from the Latin 'nil per os', meaning nothing by mouth."
+                },
+                {
+                    id: 4,
+                    strand: 1,
+                    question: "What medical symbol represents 'without'?",
+                    options: ["c with a line over it", "s with a line over it", "p with a line over it", "a with a line over it"],
+                    correct: 1,
+                    explanation: "The symbol s̄ (s with a line over it) stands for without (Latin: sine)."
+                },
+                {
+                    id: 5,
+                    strand: 1,
+                    question: "The prefix 'brady-' is defined as:",
+                    options: ["Fast", "Slow", "Bad", "Difficult"],
+                    correct: 1,
+                    explanation: "Brady- means slow (e.g., bradycardia = slow heart rate)."
+                },
+                {
+                    id: 6,
+                    strand: 1,
+                    question: "What does the combining form 'gastr/o' refer to?",
+                    options: ["Liver", "Stomach", "Gums", "Gallbladder"],
+                    correct: 1,
+                    explanation: "Gastr/o refers to the stomach."
+                },
+                {
+                    id: 7,
+                    strand: 1,
+                    question: "Which medical abbreviation means 'as needed'?",
+                    options: ["bid", "prn", "stat", "ac"],
+                    correct: 1,
+                    explanation: "PRN stands for pro re nata, meaning as needed."
+                },
+                {
+                    id: 8,
+                    strand: 1,
+                    question: "What is the term for a word root combined with a vowel?",
+                    options: ["Prefix", "Combining form", "Suffix", "Acronym"],
+                    correct: 1,
+                    explanation: "A word root plus a vowel (like cardi/o) is called a combining form."
+                },
+                {
+                    id: 9,
+                    strand: 1,
+                    question: "The suffix '-itis' indicates:",
+                    options: ["Enlargement", "Pain", "Inflammation", "Surgical repair"],
+                    correct: 2,
+                    explanation: "-itis means inflammation of a tissue or organ."
+                },
+                {
+                    id: 10,
+                    strand: 1,
+                    question: "What does the symbol 'Δ' indicate in medical charts?",
+                    options: ["Diagnosis", "Change", "Decreased", "Transfer"],
+                    correct: 1,
+                    explanation: "The Greek letter Delta (Δ) stands for change."
+                },
+                {
+                    id: 11,
+                    strand: 1,
+                    question: "Which prefix means 'below or deficient'?",
+                    options: ["Hyper-", "Hypo-", "Peri-", "Epi-"],
+                    correct: 1,
+                    explanation: "Hypo- means under, below, or deficient."
+                },
+                {
+                    id: 12,
+                    strand: 1,
+                    question: "The suffix '-megaly' means:",
+                    options: ["Softening", "Enlargement", "Tumor", "Paralysis"],
+                    correct: 1,
+                    explanation: "-megaly refers to abnormal enlargement (e.g., cardiomegaly)."
+                },
+                {
+                    id: 13,
+                    strand: 2,
+                    question: "Which anatomical plane divides the body into front (anterior) and back (posterior) portions?",
+                    options: ["Sagittal plane", "Transverse plane", "Frontal (Coronal) plane", "Midsagittal plane"],
+                    correct: 2,
+                    explanation: "The frontal or coronal plane divides the body into front and back halves."
+                },
+                {
+                    id: 14,
+                    strand: 2,
+                    question: "The term 'cervical' refers to which region of the body?",
+                    options: ["Head", "Neck", "Wrist", "Lower back"],
+                    correct: 1,
+                    explanation: "Cervical pertains to the neck."
+                },
+                {
+                    id: 15,
+                    strand: 2,
+                    question: "What body region is designated by the term 'brachial'?",
+                    options: ["Arm", "Leg", "Chest", "Groin"],
+                    correct: 0,
+                    explanation: "Brachial refers to the upper arm."
+                },
+                {
+                    id: 16,
+                    strand: 2,
+                    question: "The transverse plane divides the body into:",
+                    options: ["Equal right and left halves", "Anterior and posterior halves", "Superior and inferior portions", "Medial and lateral portions"],
+                    correct: 2,
+                    explanation: "The transverse (horizontal) plane cuts horizontally into top (superior) and bottom (inferior) sections."
+                },
+                {
+                    id: 17,
+                    strand: 3,
+                    question: "Moving an arm or leg away from the midline of the body is called:",
+                    options: ["Adduction", "Abduction", "Flexion", "Pronation"],
+                    correct: 1,
+                    explanation: "Abduction is movement away from the central midline (abduct = take away)."
+                },
+                {
+                    id: 18,
+                    strand: 3,
+                    question: "Which directional term means 'nearer to the point of attachment'?",
+                    options: ["Distal", "Proximal", "Lateral", "Inferior"],
+                    correct: 1,
+                    explanation: "Proximal means closer to the point of origin or attachment."
+                },
+                {
+                    id: 19,
+                    strand: 3,
+                    question: "Turning the forearm so the palm faces downward is called:",
+                    options: ["Supination", "Pronation", "Eversion", "Extension"],
+                    correct: 1,
+                    explanation: "Pronation turns palm facing down."
+                },
+                {
+                    id: 20,
+                    strand: 3,
+                    question: "A patient lying face up on an exam table is in what position?",
+                    options: ["Prone", "Supine", "Lateral", "Deep"],
+                    correct: 1,
+                    explanation: "Supine means lying face up."
+                },
+                {
+                    id: 21,
+                    strand: 3,
+                    question: "The heart is located __________ to the lungs.",
+                    options: ["Lateral", "Medial", "Distal", "Inferior"],
+                    correct: 1,
+                    explanation: "Medial means toward the midline center between the lungs."
+                },
+                {
+                    id: 22,
+                    strand: 4,
+                    question: "What medical term describes a black tumor of the skin?",
+                    options: ["Erythroderma", "Leukoderma", "Melanoma", "Xeroderma"],
+                    correct: 2,
+                    explanation: "Melan/o (black) + -oma (tumor) = Melanoma."
+                },
+                {
+                    id: 23,
+                    strand: 4,
+                    question: "The term 'cyanoderma' refers to skin that appears:",
+                    options: ["Yellow", "Red", "Blue", "White"],
+                    correct: 2,
+                    explanation: "Cyan/o means blue due to lack of oxygenated blood."
+                },
+                {
+                    id: 24,
+                    strand: 4,
+                    question: "Which combining form means 'nail'?",
+                    options: ["onych/o", "pil/o", "cutane/o", "rhytid/o"],
+                    correct: 0,
+                    explanation: "Onych/o is the combining form for nail."
+                },
+                {
+                    id: 25,
+                    strand: 5,
+                    question: "What is a bone-destroying cell called?",
+                    options: ["Osteoblast", "Osteoclast", "Osteocyte", "Chondrocyte"],
+                    correct: 1,
+                    explanation: "Osteoclasts break down/absorb bone tissue (-clast = destructive cell)."
+                },
+                {
+                    id: 26,
+                    strand: 5,
+                    question: "An abnormal lateral (side-to-side) curvature of the spine is:",
+                    options: ["Kyphosis", "Lordosis", "Scoliosis", "Ankylosis"],
+                    correct: 2,
+                    explanation: "Scoliosis is a lateral crooked curvature of the spine."
+                },
+                {
+                    id: 27,
+                    strand: 5,
+                    question: "The procedure 'arthrocentesis' involves:",
+                    options: ["Surgical fusion of a joint", "Puncture to remove fluid from a joint", "Visual inspection of a joint", "Removal of joint cartilage"],
+                    correct: 1,
+                    explanation: "-centesis means surgical puncture to withdraw fluid."
+                },
+                {
+                    id: 28,
+                    strand: 6,
+                    question: "The medical term for muscle pain is:",
+                    options: ["Myasthenia", "Myalgia", "Myoma", "Myorrhexis"],
+                    correct: 1,
+                    explanation: "My/o (muscle) + -algia (pain) = Myalgia."
+                },
+                {
+                    id: 29,
+                    strand: 6,
+                    question: "A decrease in muscle size or wasting away from disuse is termed:",
+                    options: ["Atrophy", "Hypertrophy", "Dystrophy", "Bradykinesia"],
+                    correct: 0,
+                    explanation: "Atrophy means lack of growth or wasting away."
+                },
+                {
+                    id: 30,
+                    strand: 6,
+                    question: "What diagnostic test records the electrical activity of muscles?",
+                    options: ["EEG", "EKG", "EMG", "MRI"],
+                    correct: 2,
+                    explanation: "EMG = Electromyogram."
+                },
+                {
+                    id: 31,
+                    strand: 7,
+                    question: "A patient suffering from difficulty speaking following a stroke has:",
+                    options: ["Aphasia", "Dysphasia", "Neuralgia", "Dementia"],
+                    correct: 1,
+                    explanation: "Dysphasia means difficulty speaking (a- = without; dys- = difficult)."
+                },
+                {
+                    id: 32,
+                    strand: 7,
+                    question: "Inflammation of the membranes covering the brain and spinal cord is:",
+                    options: ["Encephalitis", "Meningitis", "Poliomyelitis", "Neuritis"],
+                    correct: 1,
+                    explanation: "Meninges (coverings) + -itis = Meningitis."
+                },
+                {
+                    id: 33,
+                    strand: 7,
+                    question: "Paralysis affecting all four extremities is termed:",
+                    options: ["Hemiplegia", "Paraplegia", "Quadriplegia", "Hemiparesis"],
+                    correct: 2,
+                    explanation: "Quadri- (four) + -plegia (paralysis) = Quadriplegia."
+                },
+                {
+                    id: 34,
+                    strand: 8,
+                    question: "What is the medical term for double vision?",
+                    options: ["Myopia", "Hyperopia", "Diplopia", "Presbyopia"],
+                    correct: 2,
+                    explanation: "Dipl/o (double) + -opia (vision) = Diplopia."
+                },
+                {
+                    id: 35,
+                    strand: 8,
+                    question: "Hearing loss resulting from the aging process is called:",
+                    options: ["Presbycusis", "Otitis media", "Otosclerosis", "Presbyopia"],
+                    correct: 0,
+                    explanation: "Presby- (old age) + -cusis (hearing) = Presbycusis."
+                },
+                {
+                    id: 36,
+                    strand: 8,
+                    question: "The combining form 'blephar/o' refers to the:",
+                    options: ["Cornea", "Eyelid", "Iris", "Tear duct"],
+                    correct: 1,
+                    explanation: "Blephar/o refers to the eyelid."
+                },
+                {
+                    id: 37,
+                    strand: 8,
+                    question: "An instrument used to visually examine the ear is an:",
+                    options: ["Ophthalmoscope", "Otoscope", "Spirometer", "Arthroscope"],
+                    correct: 1,
+                    explanation: "Ot/o (ear) + -scope (viewing instrument) = Otoscope."
+                },
+                {
+                    id: 38,
+                    strand: 9,
+                    question: "The condition of having abnormally high blood glucose levels is:",
+                    options: ["Hypoglycemia", "Hyperglycemia", "Hyperthyroidism", "Glucosuria"],
+                    correct: 1,
+                    explanation: "Hyper- (high) + glyc/o (sugar) + -emia (blood condition) = Hyperglycemia."
+                },
+                {
+                    id: 39,
+                    strand: 9,
+                    question: "Excessive thirst, a classic symptom of diabetes, is documented as:",
+                    options: ["Polyuria", "Polydipsia", "Polyphagia", "Polycythemia"],
+                    correct: 1,
+                    explanation: "Polydipsia = excessive thirst (dips/o = thirst)."
+                },
+                {
+                    id: 40,
+                    strand: 9,
+                    question: "Surgical removal of the thyroid gland is a:",
+                    options: ["Thyroidectomy", "Thyroidotomy", "Thyroidostomy", "Thyroiditis"],
+                    correct: 0,
+                    explanation: "Thyroid + -ectomy (removal) = Thyroidectomy."
+                },
+                {
+                    id: 41,
+                    strand: 10,
+                    question: "A resting heart rate recorded below 60 beats per minute is:",
+                    options: ["Tachycardia", "Bradycardia", "Arrhythmia", "Ischemia"],
+                    correct: 1,
+                    explanation: "Bradycardia = slow heart rate under 60 bpm."
+                },
+                {
+                    id: 42,
+                    strand: 10,
+                    question: "Hardening of the arteries due to fatty plaque buildup is called:",
+                    options: ["Arteriorrhexis", "Atherosclerosis", "Arteriosclerosis", "Angioma"],
+                    correct: 1,
+                    explanation: "Ather/o (fatty plaque) + sclerosis (hardening) = Atherosclerosis."
+                },
+                {
+                    id: 43,
+                    strand: 10,
+                    question: "What type of cell is an erythrocyte?",
+                    options: ["White blood cell", "Red blood cell", "Platelet", "Stem cell"],
+                    correct: 1,
+                    explanation: "Erythr/o (red) + -cyte (cell) = Red blood cell."
+                },
+                {
+                    id: 44,
+                    strand: 10,
+                    question: "The medical abbreviation 'MI' stands for:",
+                    options: ["Mitral Insufficiency", "Myocardial Infarction", "Muscular Injury", "Medical Inspection"],
+                    correct: 1,
+                    explanation: "MI = Myocardial Infarction (heart attack)."
+                },
+                {
+                    id: 45,
+                    strand: 10,
+                    question: "Which combining form means 'vein'?",
+                    options: ["Arteri/o", "Phleb/o", "Angi/o", "Aort/o"],
+                    correct: 1,
+                    explanation: "Phleb/o (and ven/o) means vein."
+                },
+                {
+                    id: 46,
+                    strand: 10,
+                    question: "The process of recording the electrical activity of the heart is:",
+                    options: ["Echocardiogram", "Electrocardiography", "Angiography", "Hematocrit"],
+                    correct: 1,
+                    explanation: "Electrocardiography is the recording process (-graphy)."
+                },
+                {
+                    id: 47,
+                    strand: 10,
+                    question: "Enlargement of the heart is documented as:",
+                    options: ["Cardiomyopathy", "Cardiomegaly", "Carditis", "Cardiodynia"],
+                    correct: 1,
+                    explanation: "Cardi/o (heart) + -megaly (enlargement) = Cardiomegaly."
+                },
+                {
+                    id: 48,
+                    strand: 10,
+                    question: "A blood clot floating or attached inside a vessel is a:",
+                    options: ["Hematoma", "Thrombus", "Leukocyte", "Atheroma"],
+                    correct: 1,
+                    explanation: "Thromb/o refers to a clot (thrombus)."
+                },
+                {
+                    id: 49,
+                    strand: 10,
+                    question: "Deficiency of blood supply to a tissue or organ is called:",
+                    options: ["Anemia", "Ischemia", "Hemostasis", "Hemorrhage"],
+                    correct: 1,
+                    explanation: "Ischemia means restriction/deficiency of blood flow to tissues."
+                },
+                {
+                    id: 50,
+                    strand: 11,
+                    question: "Swelling caused by accumulation of lymphatic fluid in tissues is:",
+                    options: ["Lymphedema", "Lymphoma", "Lymphadenitis", "Lymphangioma"],
+                    correct: 0,
+                    explanation: "Lymph + -edema (swelling) = Lymphedema."
+                },
+                {
+                    id: 51,
+                    strand: 11,
+                    question: "A large eating cell involved in immune response is a:",
+                    options: ["Lymphocyte", "Macrophage", "Microcyte", "Toxoid"],
+                    correct: 1,
+                    explanation: "Macro- (large) + -phage (eating) = Macrophage."
+                },
+                {
+                    id: 52,
+                    strand: 12,
+                    question: "What term describes rapid, shallow breathing?",
+                    options: ["Bradypnea", "Tachypnea", "Dyspnea", "Apnea"],
+                    correct: 1,
+                    explanation: "Tachy- (fast) + -pnea (breathing) = Tachypnea."
+                },
+                {
+                    id: 53,
+                    strand: 12,
+                    question: "Difficulty breathing except when sitting upright is:",
+                    options: ["Orthopnea", "Eupnea", "Apnea", "Hypercapnia"],
+                    correct: 0,
+                    explanation: "Orthopnea = difficulty breathing lying flat."
+                },
+                {
+                    id: 54,
+                    strand: 12,
+                    question: "Surgical repair of the nose is called:",
+                    options: ["Rhinorrhea", "Rhinoplasty", "Tracheotomy", "Laryngoscopy"],
+                    correct: 1,
+                    explanation: "Rhin/o (nose) + -plasty (surgical repair) = Rhinoplasty."
+                },
+                {
+                    id: 55,
+                    strand: 12,
+                    question: "What does the abbreviation 'COPD' stand for?",
+                    options: ["Chronic Obstructive Pulmonary Disease", "Coronary Oxygen Deficiency Pressure", "Certified Orthopedic Pediatric Doctor", "Congestive Pulmonary Disease"],
+                    correct: 0,
+                    explanation: "COPD = Chronic Obstructive Pulmonary Disease."
+                },
+                {
+                    id: 56,
+                    strand: 13,
+                    question: "Inflammation of the gallbladder is termed:",
+                    options: ["Cholelithiasis", "Cholecystitis", "Hepatitis", "Pancreatitis"],
+                    correct: 1,
+                    explanation: "Cholecyst/o (gallbladder) + -itis = Cholecystitis."
+                },
+                {
+                    id: 57,
+                    strand: 13,
+                    question: "Difficulty or painful swallowing is documented as:",
+                    options: ["Dyspepsia", "Dysphagia", "Dysphasia", "Aphagia"],
+                    correct: 1,
+                    explanation: "Dysphagia = difficulty swallowing (-phagia = eating/swallowing)."
+                },
+                {
+                    id: 58,
+                    strand: 14,
+                    question: "The presence of blood in the urine is called:",
+                    options: ["Dysuria", "Hematuria", "Anuria", "Nocturia"],
+                    correct: 1,
+                    explanation: "Hemat/o (blood) + -uria (urine) = Hematuria."
+                },
+                {
+                    id: 59,
+                    strand: 14,
+                    question: "Surgical fixation of a floating or dropped kidney is:",
+                    options: ["Nephrectomy", "Nephropexy", "Nephrotomy", "Nephrostomy"],
+                    correct: 1,
+                    explanation: "Nephr/o + -pexy (surgical fixation/suspension)."
+                },
+                {
+                    id: 60,
+                    strand: 15,
+                    question: "Surgical removal of the uterus is called a:",
+                    options: ["Oophorectomy", "Hysterectomy", "Salpingectomy", "Episiotomy"],
+                    correct: 1,
+                    explanation: "Hyster/o (uterus) + -ectomy = Hysterectomy."
+                }
+            ]
+        };
+
+        /**
+         * APPLICATION STATE CONTROLLER
+         */
+        const state = {
+            activeTab: 'modules',
+            selectedStrandId: 1,
+            masteredCards: new Set(JSON.parse(localStorage.getItem('medterm_mastered') || '[]')),
+            needsReviewCards: new Set(JSON.parse(localStorage.getItem('medterm_review') || '[]')),
+            
+            // Flashcard State
+            flashcardIndex: 0,
+            filteredCards: [],
+            isFlipped: false,
+
+            // Speed Drill State
+            drillScore: 0,
+            drillTotal: 0,
+            drillStreak: 0,
+            currentDrillItem: null,
+
+            // Exam State
+            examActive: false,
+            examQuestions: [],
+            currentExamIndex: 0,
+            userAnswers: {},
+            examStartTime: null,
+            examTimerInterval: null
+        };
+
+        // Initialize App on DOM Ready
+        document.addEventListener('DOMContentLoaded', () => {
+            initTabs();
+            initStrandModules();
+            initDeconstructor();
+            initFlashcards();
+            initDrill();
+            initExam();
+            updateGlobalProgress();
+            
+            // Dark Mode Toggle
+            document.getElementById('themeToggleBtn').addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+            });
+
+            // Data Reset Toggle
+            document.getElementById('resetDataBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                if (confirm("Reset all saved progress and flashcard mastery?")) {
+                    localStorage.removeItem('medterm_mastered');
+                    localStorage.removeItem('medterm_review');
+                    state.masteredCards.clear();
+                    state.needsReviewCards.clear();
+                    updateGlobalProgress();
+                    renderFlashcard();
+                    alert("Progress reset successfully!");
+                }
+            });
+        });
+
+        /* ================= TABS CONTROLLER ================= */
+        function initTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const target = btn.dataset.tab;
+                    tabBtns.forEach(b => b.classList.remove('active', 'bg-medical-600', 'text-white'));
+                    btn.classList.add('active', 'bg-medical-600', 'text-white');
+
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+                    document.getElementById(`tab-${target}`).classList.remove('hidden');
+                    state.activeTab = target;
+                });
+            });
+            // Set default active tab style
+            document.querySelector('.tab-btn[data-tab="modules"]').classList.add('bg-medical-600', 'text-white');
+        }
+
+        /* ================= STRAND MODULES ================= */
+        function initStrandModules() {
+            const listContainer = document.getElementById('strandListContainer');
+            listContainer.innerHTML = '';
+
+            APP_DATA.strands.forEach(strand => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-3.5 rounded-xl text-xs font-semibold border transition flex items-center justify-between ${
+                    strand.id === state.selectedStrandId 
+                    ? 'bg-medical-600 text-white border-medical-600 shadow-sm' 
+                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-100'
+                }`;
+                btn.innerHTML = `
+                    <div class="truncate pr-2">
+                        <div class="font-bold">Strand ${strand.id}</div>
+                        <div class="text-[11px] opacity-80 truncate">${strand.title.split(':')[1] || strand.title}</div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-mono ${strand.id === state.selectedStrandId ? 'bg-medical-800 text-teal-300' : 'bg-slate-100 dark:bg-slate-700 text-slate-500'}">
+                        ${strand.weight} pts
+                    </span>
+                `;
+                btn.addEventListener('click', () => {
+                    state.selectedStrandId = strand.id;
+                    initStrandModules();
+                    renderStrandDetail(strand.id);
+                });
+                listContainer.appendChild(btn);
+            });
+
+            renderStrandDetail(state.selectedStrandId);
+
+            // Search Bar Filter
+            document.getElementById('strandSearchInput').addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                if (!query) return renderStrandDetail(state.selectedStrandId);
+                
+                // Search across terms
+                const detailPane = document.getElementById('strandDetailPane');
+                let matches = [];
+                APP_DATA.strands.forEach(s => {
+                    const items = s.terms || [...(s.prefixes||[]), ...(s.roots||[]), ...(s.suffixes||[])];
+                    items.forEach(it => {
+                        if ((it.term || it.abbr).toLowerCase().includes(query) || it.def.toLowerCase().includes(query)) {
+                            matches.push({ ...it, strand: s.id });
+                        }
+                    });
+                });
+
+                detailPane.innerHTML = `
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Search Results for "${query}" (${matches.length} found)</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[550px] overflow-y-auto pr-1">
+                        ${matches.map(m => `
+                            <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <div class="font-bold text-medical-600 dark:text-teal-400 font-mono text-sm">${m.term || m.abbr}</div>
+                                <div class="text-xs text-slate-600 dark:text-slate-300 mt-1">${m.def}</div>
+                                <div class="text-[10px] text-slate-400 mt-2">Found in Strand ${m.strand}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            });
+        }
+
+        function renderStrandDetail(strandId) {
+            const strand = APP_DATA.strands.find(s => s.id === strandId);
+            const detailPane = document.getElementById('strandDetailPane');
+
+            let contentHTML = `
+                <div class="border-b border-slate-200 dark:border-slate-700 pb-4 mb-6">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-1 bg-medical-100 dark:bg-medical-950 text-medical-700 dark:text-teal-300 font-bold rounded-lg text-xs font-mono">
+                            Strand ${strand.id} Standard
+                        </span>
+                        <span class="text-xs text-slate-400 font-mono">Exam Weight: ${strand.weight} / 60 points</span>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-2">${strand.title}</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${strand.description}</p>
+                </div>
+            `;
+
+            // If Strand 1 (Special Breakdown)
+            if (strand.id === 1) {
+                contentHTML += `
+                    <div class="space-y-6 max-h-[550px] overflow-y-auto pr-2">
+                        <div>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 mb-2">Core Combining Rules</h4>
+                            <ul class="list-disc list-inside text-xs space-y-1 text-slate-600 dark:text-slate-300 bg-purple-50 dark:bg-purple-950/40 p-3 rounded-xl border border-purple-200 dark:border-purple-800">
+                                ${strand.rules.map(r => `<li>${r}</li>`).join('')}
+                            </ul>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-medical-600 dark:text-teal-400 mb-2">General Prefixes</h4>
+                                <div class="space-y-1.5 font-mono text-xs">
+                                    ${strand.prefixes.map(p => `
+                                        <div class="p-2 bg-slate-50 dark:bg-slate-900 rounded-lg flex justify-between">
+                                            <span class="font-bold text-slate-800 dark:text-slate-200">${p.term}</span>
+                                            <span class="text-slate-500">${p.def}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 mb-2">General Suffixes</h4>
+                                <div class="space-y-1.5 font-mono text-xs">
+                                    ${strand.suffixes.map(s => `
+                                        <div class="p-2 bg-slate-50 dark:bg-slate-900 rounded-lg flex justify-between">
+                                            <span class="font-bold text-slate-800 dark:text-slate-200">${s.term}</span>
+                                            <span class="text-slate-500">${s.def}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Systems Strands (4-15)
+                contentHTML += `
+                    <div class="max-h-[550px] overflow-y-auto pr-2">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-medical-600 dark:text-teal-400 mb-3">High-Yield Medical Terms & Combining Forms</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
+                            ${strand.terms.map(t => `
+                                <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
+                                    <span class="font-bold text-sm text-slate-900 dark:text-white">${t.term}</span>
+                                    <span class="text-slate-500 dark:text-slate-400 text-xs mt-1 font-sans">${t.def}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            detailPane.innerHTML = contentHTML;
+        }
+
+        /* ================= WORD DECONSTRUCTOR ================= */
+        function initDeconstructor() {
+            const pSelect = document.getElementById('builderPrefixSelect');
+            const rSelect = document.getElementById('builderRootSelect');
+            const sSelect = document.getElementById('builderSuffixSelect');
+
+            // Gather all prefixes, roots, suffixes
+            const s1 = APP_DATA.strands[0];
+            s1.prefixes.forEach(p => pSelect.add(new Option(`${p.term} (${p.def})`, p.term)));
+            
+            // Collect all roots across all strands
+            let allRoots = [...s1.roots];
+            APP_DATA.strands.slice(3).forEach(st => {
+                (st.terms||[]).forEach(t => {
+                    if (t.term.includes('/')) allRoots.push({ term: t.term, def: t.def });
+                });
+            });
+            allRoots.forEach(r => rSelect.add(new Option(`${r.term} (${r.def})`, r.term)));
+            
+            s1.suffixes.forEach(s => sSelect.add(new Option(`${s.term} (${s.def})`, s.term)));
+
+            const updateBuilder = () => {
+                const prefixVal = pSelect.value;
+                const rootVal = rSelect.value;
+                const suffixVal = sSelect.value;
+
+                if (!rootVal && !suffixVal) {
+                    document.getElementById('constructedTermDisplay').innerText = "-- Select Components Above --";
+                    document.getElementById('constructedDefinitionDisplay').innerText = "Combine parts above to view synthesized definition.";
+                    document.getElementById('componentPillsContainer').innerHTML = '';
+                    return;
+                }
+
+                // Apply combining vowel rules
+                let constructed = "";
+                let pills = [];
+
+                if (prefixVal) {
+                    const cleanP = prefixVal.replace('-', '');
+                    constructed += cleanP;
+                    pills.push(`<span class="px-2 py-1 bg-purple-800 text-purple-200 rounded">Prefix: ${prefixVal}</span>`);
+                }
+
+                if (rootVal) {
+                    const rootBase = rootVal.split('/')[0];
+                    constructed += rootBase;
+                    
+                    // Add combining vowel 'o' if suffix starts with consonant
+                    const suffixStartsWithVowel = suffixVal && ['a','e','i','o','u','y'].includes(suffixVal.replace('-', '')[0]);
+                    if (!suffixStartsWithVowel && suffixVal) {
+                        constructed += "o";
+                    }
+                    pills.push(`<span class="px-2 py-1 bg-indigo-800 text-indigo-200 rounded">Root: ${rootVal}</span>`);
+                }
+
+                if (suffixVal) {
+                    const cleanS = suffixVal.replace('-', '');
+                    constructed += cleanS;
+                    pills.push(`<span class="px-2 py-1 bg-amber-800 text-amber-200 rounded">Suffix: ${suffixVal}</span>`);
+                }
+
+                document.getElementById('constructedTermDisplay').innerText = constructed.toLowerCase();
+                document.getElementById('componentPillsContainer').innerHTML = pills.join(' + ');
+                
+                // Synthesize definition string
+                let def = "Medical condition/procedure involving ";
+                if (suffixVal) def = `State/process of ${s1.suffixes.find(s=>s.term===suffixVal)?.def || 'condition'} `;
+                if (rootVal) def += `related to ${allRoots.find(r=>r.term===rootVal)?.def || 'organ'} `;
+                if (prefixVal) def += `(${s1.prefixes.find(p=>p.term===prefixVal)?.def || ''})`;
+
+                document.getElementById('constructedDefinitionDisplay').innerText = def;
+            };
+
+            pSelect.addEventListener('change', updateBuilder);
+            rSelect.addEventListener('change', updateBuilder);
+            sSelect.addEventListener('change', updateBuilder);
+
+            // Preset challenges buttons
+            const presets = ["Gastroenteritis", "Bradycardia", "Dysphasia", "Cardiomegaly", "Dermatitis", "Nephrectomy"];
+            const pContainer = document.getElementById('presetChallengesContainer');
+            pContainer.innerHTML = presets.map(p => `
+                <button class="px-3 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-purple-600 hover:text-white rounded-xl text-xs font-bold transition font-mono">${p}</button>
+            `).join('');
+
+            pContainer.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const term = btn.innerText;
+                    if (term === "Gastroenteritis") {
+                        pSelect.value = "";
+                        rSelect.value = "gastr/o";
+                        sSelect.value = "-itis";
+                    } else if (term === "Bradycardia") {
+                        pSelect.value = "brady-";
+                        rSelect.value = "cardi/o";
+                        sSelect.value = "-ia";
+                    }
+                    updateBuilder();
+                });
+            });
+        }
+
+        /* ================= FLASHCARD DECKS ================= */
+        function initFlashcards() {
+            const strandFilter = document.getElementById('flashcardStrandFilter');
+            APP_DATA.strands.forEach(s => {
+                strandFilter.add(new Option(`Strand ${s.id}: ${s.title.split(':')[1]||s.title}`, s.id));
+            });
+
+            const cardEl = document.getElementById('flashcardElement');
+            cardEl.addEventListener('click', () => {
+                state.isFlipped = !state.isFlipped;
+                cardEl.classList.toggle('flipped', state.isFlipped);
+            });
+
+            document.getElementById('prevCardBtn').addEventListener('click', () => changeCard(-1));
+            document.getElementById('nextCardBtn').addEventListener('click', () => changeCard(1));
+            document.getElementById('shuffleCardsBtn').addEventListener('click', shuffleFlashcards);
+
+            document.getElementById('markMasteredBtn').addEventListener('click', () => {
+                const current = state.filteredCards[state.flashcardIndex];
+                if (current) {
+                    state.masteredCards.add(current.term || current.abbr);
+                    state.needsReviewCards.delete(current.term || current.abbr);
+                    saveProgress();
+                    changeCard(1);
+                }
+            });
+
+            document.getElementById('markNeedsReviewBtn').addEventListener('click', () => {
+                const current = state.filteredCards[state.flashcardIndex];
+                if (current) {
+                    state.needsReviewCards.add(current.term || current.abbr);
+                    state.masteredCards.delete(current.term || current.abbr);
+                    saveProgress();
+                    changeCard(1);
+                }
+            });
+
+            strandFilter.addEventListener('change', buildFilteredCards);
+            document.getElementById('flashcardTypeFilter').addEventListener('change', buildFilteredCards);
+
+            buildFilteredCards();
+        }
+
+        function buildFilteredCards() {
+            const strandVal = document.getElementById('flashcardStrandFilter').value;
+            const typeVal = document.getElementById('flashcardTypeFilter').value;
+
+            let cards = [];
+            APP_DATA.strands.forEach(s => {
+                if (strandVal !== 'all' && s.id !== parseInt(strandVal)) return;
+
+                if (s.id === 1) {
+                    if (typeVal === 'all' || typeVal === 'prefixes') cards.push(...s.prefixes.map(p => ({ term: p.term, def: p.def, cat: 'PREFIX', strand: 1 })));
+                    if (typeVal === 'all' || typeVal === 'suffixes') cards.push(...s.suffixes.map(sf => ({ term: sf.term, def: sf.def, cat: 'SUFFIX', strand: 1 })));
+                    if (typeVal === 'all' || typeVal === 'roots') cards.push(...s.roots.map(r => ({ term: r.term, def: r.def, cat: 'ROOT', strand: 1 })));
+                    if (typeVal === 'all' || typeVal === 'abbreviations') cards.push(...s.abbreviations.map(a => ({ term: a.abbr, def: a.def, cat: 'ABBREVIATION', strand: 1 })));
+                } else {
+                    if (typeVal === 'all' || typeVal === 'terms') {
+                        cards.push(...(s.terms||[]).map(t => ({ term: t.term, def: t.def, cat: `STRAND ${s.id}`, strand: s.id })));
+                    }
+                }
+            });
+
+            state.filteredCards = cards;
+            state.flashcardIndex = 0;
+            renderFlashcard();
+        }
+
+        function shuffleFlashcards() {
+            for (let i = state.filteredCards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [state.filteredCards[i], state.filteredCards[j]] = [state.filteredCards[j], state.filteredCards[i]];
+            }
+            state.flashcardIndex = 0;
+            renderFlashcard();
+        }
+
+        function changeCard(dir) {
+            state.isFlipped = false;
+            document.getElementById('flashcardElement').classList.remove('flipped');
+            
+            state.flashcardIndex = (state.flashcardIndex + dir + state.filteredCards.length) % state.filteredCards.length;
+            setTimeout(renderFlashcard, 150);
+        }
+
+        function renderFlashcard() {
+            const card = state.filteredCards[state.flashcardIndex];
+            if (!card) {
+                document.getElementById('cardFrontText').innerText = "No Cards Match Filter";
+                document.getElementById('cardBackDefinition').innerText = "Try changing deck filters above.";
+                return;
+            }
+
+            document.getElementById('cardCategoryTag').innerText = card.cat;
+            document.getElementById('cardFrontText').innerText = card.term;
+            document.getElementById('cardBackDefinition').innerText = card.def;
+            document.getElementById('cardBackStrand').innerText = `Utah CTE Standard Strand ${card.strand}`;
+            document.getElementById('cardCountIndicator').innerText = `Card ${state.flashcardIndex + 1} of ${state.filteredCards.length}`;
+
+            // Mastery Badge Indicator
+            const isMastered = state.masteredCards.has(card.term);
+            document.getElementById('cardFrontSubtext').innerText = isMastered ? "✅ Mastered Term (Click to Flip)" : "Click card or press Spacebar";
+        }
+
+        /* ================= DRILL GAME ================= */
+        function initDrill() {
+            loadNextDrillItem();
+        }
+
+        function loadNextDrillItem() {
+            // Collect all symbols + abbreviations
+            const items = [
+                ...APP_DATA.strands[0].abbreviations.map(a => ({ prompt: a.abbr, answer: a.def, cat: 'Abbreviation' })),
+                ...APP_DATA.strands[0].symbols.map(s => ({ prompt: s.symbol, answer: s.def, cat: 'Medical Symbol' }))
+            ];
+
+            const item = items[Math.floor(Math.random() * items.length)];
+            state.currentDrillItem = item;
+
+            document.getElementById('drillPrompt').innerText = item.prompt;
+            document.getElementById('drillCategoryTag').innerText = `Category: ${item.cat}`;
+            document.getElementById('drillFeedback').classList.add('hidden');
+
+            // Generate 4 choice options
+            let options = [item.answer];
+            while (options.length < 4) {
+                const rand = items[Math.floor(Math.random() * items.length)].answer;
+                if (!options.includes(rand)) options.push(rand);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const container = document.getElementById('drillOptionsContainer');
+            container.innerHTML = options.map(opt => `
+                <button class="p-4 bg-slate-50 dark:bg-slate-900 hover:bg-medical-600 hover:text-white rounded-2xl border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-800 dark:text-slate-200 transition text-left">
+                    ${opt}
+                </button>
+            `).join('');
+
+            container.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', () => checkDrillAnswer(btn.innerText.trim()));
+            });
+        }
+
+        function checkDrillAnswer(selected) {
+            const correct = state.currentDrillItem.answer;
+            const feedback = document.getElementById('drillFeedback');
+            feedback.classList.remove('hidden');
+
+            state.drillTotal++;
+            if (selected === correct) {
+                state.drillScore++;
+                state.drillStreak++;
+                feedback.className = "p-4 rounded-xl text-sm font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300";
+                feedback.innerText = "🎯 Correct! Excellent recall.";
+            } else {
+                state.drillStreak = 0;
+                feedback.className = "p-4 rounded-xl text-sm font-bold bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300";
+                feedback.innerText = `❌ Incorrect. Correct answer: ${correct}`;
+            }
+
+            document.getElementById('drillScore').innerText = `${state.drillScore} / ${state.drillTotal}`;
+            document.getElementById('drillStreak').innerText = `${state.drillStreak} 🔥`;
+
+            setTimeout(loadNextDrillItem, 1200);
+        }
+
+        /* ================= STATE EXAM SIMULATOR ================= */
+        function initExam() {
+            document.getElementById('startFullExamBtn').addEventListener('click', () => startExam(60));
+            document.getElementById('startQuickQuizBtn').addEventListener('click', () => startExam(15));
+            document.getElementById('quitExamBtn').addEventListener('click', endExamEarly);
+            document.getElementById('nextExamQBtn').addEventListener('click', () => navigateExam(1));
+            document.getElementById('prevExamQBtn').addEventListener('click', () => navigateExam(-1));
+            document.getElementById('retakeExamBtn').addEventListener('click', () => {
+                document.getElementById('examResultsCard').classList.add('hidden');
+                document.getElementById('examIntroCard').classList.remove('hidden');
+            });
+            document.getElementById('backToModulesBtn').addEventListener('click', () => {
+                document.querySelector('.tab-btn[data-tab="modules"]').click();
+            });
+        }
+
+        function startExam(count) {
+            state.examActive = true;
+            state.userAnswers = {};
+            state.currentExamIndex = 0;
+
+            // Pick questions
+            state.examQuestions = [...APP_DATA.questionBank].sort(() => Math.random() - 0.5).slice(0, count);
+
+            document.getElementById('examIntroCard').classList.add('hidden');
+            document.getElementById('examActiveStage').classList.remove('hidden');
+            document.getElementById('examResultsCard').classList.add('hidden');
+
+            // Timer setup
+            state.examStartTime = Date.now();
+            clearInterval(state.examTimerInterval);
+            state.examTimerInterval = setInterval(() => {
+                const elapsedSec = Math.floor((Date.now() - state.examStartTime) / 1000);
+                const mins = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
+                const secs = String(elapsedSec % 60).padStart(2, '0');
+                document.getElementById('examTimer').innerText = `${mins}:${secs}`;
+            }, 1000);
+
+            renderExamQuestion();
+        }
+
+        function renderExamQuestion() {
+            const q = state.examQuestions[state.currentExamIndex];
+            document.getElementById('examQuestionCounter').innerText = `Question ${state.currentExamIndex + 1} of ${state.examQuestions.length}`;
+            document.getElementById('examStrandBadge').innerText = `Strand ${q.strand} Standard`;
+            document.getElementById('examQuestionText').innerText = q.question;
+
+            const list = document.getElementById('examOptionsList');
+            const rationaleBox = document.getElementById('examRationaleBox');
+            rationaleBox.classList.add('hidden');
+
+            list.innerHTML = q.options.map((opt, idx) => {
+                const isSelected = state.userAnswers[state.currentExamIndex] === idx;
+                return `
+                    <button class="w-full text-left p-4 rounded-2xl border transition flex items-start gap-3 font-medium text-sm ${
+                        isSelected 
+                        ? 'bg-emerald-50 dark:bg-emerald-950/60 border-emerald-500 text-emerald-900 dark:text-emerald-200 shadow-sm' 
+                        : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:bg-slate-100'
+                    }" onclick="selectExamOption(${idx})">
+                        <span class="w-6 h-6 rounded-full border border-current flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">${String.fromCharCode(65 + idx)}</span>
+                        <span>${opt}</span>
+                    </button>
+                `;
+            }).join('');
+
+            // If answered, show rationale
+            if (state.userAnswers[state.currentExamIndex] !== undefined) {
+                const userAns = state.userAnswers[state.currentExamIndex];
+                const isCorrect = userAns === q.correct;
+                rationaleBox.classList.remove('hidden');
+                rationaleBox.className = `p-4 rounded-2xl border text-sm space-y-1 ${isCorrect ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 text-emerald-800 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 text-rose-800 dark:text-rose-200'}`;
+                document.getElementById('rationaleHeader').innerHTML = isCorrect ? '✅ Correct Answer' : '❌ Incorrect Answer';
+                document.getElementById('rationaleText').innerText = q.explanation;
+            }
+        }
+
+        window.selectExamOption = function(idx) {
+            state.userAnswers[state.currentExamIndex] = idx;
+            renderExamQuestion();
+        };
+
+        function navigateExam(dir) {
+            if (dir === 1 && state.currentExamIndex === state.examQuestions.length - 1) {
+                finishExam();
+                return;
+            }
+            state.currentExamIndex = Math.max(0, Math.min(state.examQuestions.length - 1, state.currentExamIndex + dir));
+            renderExamQuestion();
+        }
+
+        function endExamEarly() {
+            if (confirm("Are you sure you want to finish the exam early?")) {
+                finishExam();
+            }
+        }
+
+        function finishExam() {
+            clearInterval(state.examTimerInterval);
+            document.getElementById('examActiveStage').classList.add('hidden');
+            document.getElementById('examResultsCard').classList.remove('hidden');
+
+            let score = 0;
+            let strandScores = {};
+
+            state.examQuestions.forEach((q, idx) => {
+                if (!strandScores[q.strand]) strandScores[q.strand] = { correct: 0, total: 0 };
+                strandScores[q.strand].total++;
+
+                if (state.userAnswers[idx] === q.correct) {
+                    score++;
+                    strandScores[q.strand].correct++;
+                }
+            });
+
+            const percent = Math.round((score / state.examQuestions.length) * 100);
+            const passed = percent >= APP_DATA.examInfo.cutScorePercent;
+
+            document.getElementById('finalScorePercent').innerText = `${percent}%`;
+            document.getElementById('finalScoreFraction').innerText = `${score} of ${state.examQuestions.length} Correct`;
+            
+            const statusEl = document.getElementById('finalPassFailStatus');
+            statusEl.innerText = passed ? "PASSED 🎉" : "NEEDS PRACTICE 📖";
+            statusEl.className = `text-2xl font-bold mt-2 ${passed ? 'text-emerald-500' : 'text-rose-500'}`;
+
+            document.getElementById('finalTimeTaken').innerText = document.getElementById('examTimer').innerText;
+
+            // Render Strand Results Table
+            const tbody = document.getElementById('strandResultsTableBody');
+            tbody.innerHTML = Object.keys(strandScores).map(stId => {
+                const st = strandScores[stId];
+                const stPct = Math.round((st.correct / st.total) * 100);
+                const strandObj = APP_DATA.strands.find(s=>s.id==stId);
+                return `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/40">
+                        <td class="p-3">Strand ${stId}: ${strandObj?.title.split(':')[1]||''}</td>
+                        <td class="p-3 text-center font-mono">${st.correct} / ${st.total}</td>
+                        <td class="p-3 text-center font-mono font-bold">${stPct}%</td>
+                        <td class="p-3 text-center">
+                            <span class="px-2 py-1 rounded text-[10px] font-bold ${stPct >= 74 ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">
+                                ${stPct >= 74 ? 'MASTERED' : 'REVIEW'}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        /* ================= GLOBAL PROGRESS SAVER ================= */
+        function saveProgress() {
+            localStorage.setItem('medterm_mastered', JSON.stringify(Array.from(state.masteredCards)));
+            localStorage.setItem('medterm_review', JSON.stringify(Array.from(state.needsReviewCards)));
+            updateGlobalProgress();
+        }
+
+        function updateGlobalProgress() {
+            const totalCards = 150; // Total dataset count approximation
+            const masteredCount = state.masteredCards.size;
+            const pct = Math.round((masteredCount / totalCards) * 100);
+
+            document.getElementById('headerProgressText').innerText = `${masteredCount} / ${totalCards} (${pct}%)`;
+            document.getElementById('headerProgressBar').style.width = `${pct}%`;
+        }
+    </script>
+</body>
+</html>
